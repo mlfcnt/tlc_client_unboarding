@@ -2,12 +2,17 @@ import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 import {NextResponse} from "next/server";
 
 // Define public routes that don't require authentication
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)"]);
+const isPublicRoute = createRouteMatcher(["/sign-in(.*)"]);
 
 // This middleware configures Clerk to handle authentication
 export default clerkMiddleware(async (auth, req) => {
   const {userId} = await auth();
   const path = req.nextUrl.pathname;
+
+  // Redirect root path to sign-in
+  if (path === "/") {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
 
   // Allow access to role-pending page for authenticated users
   if (path === "/role-pending" && userId) {
