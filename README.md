@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema de Gestión de Clases
 
-## Getting Started
+Una aplicación simple para la gestión de clases de inglés, que facilita la comunicación entre el equipo de ventas y los administradores.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Autenticación segura con Clerk
+- Panel de administrador para gestionar pruebas, horarios y pagos
+- Panel de ventas para registrar clientes y solicitar pruebas
+- Interfaz en español
+- Diseño responsive
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologías utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 15
+- React 19
+- Tailwind CSS 4
+- Clerk para autenticación
+- Vercel para despliegue
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuración
 
-## Learn More
+1. Clona este repositorio
+2. Instala las dependencias:
+   ```bash
+   pnpm install
+   ```
+3. Crea una cuenta en [Clerk](https://clerk.dev) y configura una aplicación
+4. Copia las claves API de Clerk en el archivo `.env.local`:
+   ```
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_YOUR_PUBLISHABLE_KEY
+   CLERK_SECRET_KEY=sk_test_YOUR_SECRET_KEY
+   ```
+5. Inicia el servidor de desarrollo:
+   ```bash
+   pnpm dev
+   ```
+6. Abre [http://localhost:3000](http://localhost:3000) en tu navegador
 
-To learn more about Next.js, take a look at the following resources:
+## Despliegue en Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+La forma más sencilla de desplegar esta aplicación es utilizando [Vercel](https://vercel.com):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Crea una cuenta en Vercel
+2. Importa este repositorio
+3. Configura las variables de entorno en Vercel con las claves API de Clerk
+4. ¡Listo! Tu aplicación estará desplegada en Vercel
 
-## Deploy on Vercel
+## Flujo de trabajo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. El equipo de ventas habla con el cliente potencial
+2. El equipo de ventas solicita una prueba al administrador
+3. El administrador envía la prueba al cliente
+4. El administrador notifica al equipo de ventas cuando la prueba está completada
+5. El administrador notifica al equipo de ventas sobre la disponibilidad de horarios y fechas de inicio
+6. El equipo de ventas proporciona esta información al cliente
+7. El cliente confirma o rechaza
+8. Si confirma, el administrador envía un enlace para el pago y detalles de la cuenta
+9. El cliente realiza el pago y envía la información al administrador
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
