@@ -9,19 +9,22 @@ export default function Header() {
 
   return (
     <header className="bg-white border-b">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
+      <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <Image
             src="/logo.png"
             alt="TLC Logo"
-            width={40}
-            height={40}
+            width={32}
+            height={32}
+            className="sm:w-[40px] sm:h-[40px]"
             priority
           />
-          <span className="font-semibold text-xl">TLC Onboarding</span>
+          <span className="font-semibold text-lg sm:text-xl">
+            TLC Onboarding
+          </span>
         </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-600">
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <span className="text-gray-600 text-sm sm:text-base hidden sm:inline">
             {user?.emailAddresses[0]?.emailAddress}
           </span>
           <UserButton afterSignOutUrl="/sign-in" />

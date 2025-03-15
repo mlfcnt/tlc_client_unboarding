@@ -199,7 +199,53 @@ export default function AdminDashboard() {
       {/* All Users Section */}
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Todos los Usuarios</h2>
-        <div className="overflow-x-auto">
+        {/* Mobile view */}
+        <div className="block md:hidden space-y-4">
+          {allUsers.map((user) => (
+            <div
+              key={user.id}
+              className="bg-white border rounded-lg p-4 space-y-3"
+            >
+              <div>
+                <label className="text-xs text-gray-500 uppercase">
+                  Nombre
+                </label>
+                <div className="text-sm font-medium text-gray-900">
+                  {user.firstName} {user.lastName}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 uppercase">Email</label>
+                <div className="text-sm text-gray-500">
+                  {user.emailAddresses[0]?.emailAddress}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 uppercase">Rol</label>
+                <div>
+                  <select
+                    value={user.role || "pending"}
+                    onChange={(e) => updateUserRole(user.id, e.target.value)}
+                    className={`mt-1 px-2 py-1 text-sm font-semibold rounded border w-full
+                      ${
+                        user.role === "admin"
+                          ? "border-purple-200 bg-purple-50 text-purple-800"
+                          : user.role === "sales"
+                          ? "border-blue-200 bg-blue-50 text-blue-800"
+                          : "border-gray-200 bg-gray-50 text-gray-800"
+                      }`}
+                  >
+                    <option value="pending">Pendiente</option>
+                    <option value="sales">Ventas</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Desktop view */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>

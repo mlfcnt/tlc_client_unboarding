@@ -141,7 +141,74 @@ export default function AdminUsersPage() {
               </div>
             )}
 
-            <div className="overflow-x-auto">
+            {/* Mobile view */}
+            <div className="block md:hidden space-y-4">
+              {users.map((user) => (
+                <div
+                  key={user.id}
+                  className="bg-white border rounded-lg p-4 space-y-3"
+                >
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase">
+                      Usuario
+                    </label>
+                    <div className="text-sm font-medium text-gray-900">
+                      {user.firstName} {user.lastName}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase">
+                      Email
+                    </label>
+                    <div className="text-sm text-gray-500">
+                      {user.emailAddress}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase">
+                      Rol Actual
+                    </label>
+                    <div className="mt-1">
+                      <span
+                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          user.role === "admin"
+                            ? "text-green-800 bg-green-100"
+                            : user.role === "sales"
+                            ? "text-blue-800 bg-blue-100"
+                            : "text-yellow-800 bg-yellow-100"
+                        }`}
+                      >
+                        {user.role || "Pendiente"}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase">
+                      Acciones
+                    </label>
+                    <div className="mt-2 flex flex-col space-y-2">
+                      <button
+                        onClick={() => handleRoleChange(user.id, "admin")}
+                        className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                        disabled={user.role === "admin"}
+                      >
+                        Hacer Admin
+                      </button>
+                      <button
+                        onClick={() => handleRoleChange(user.id, "sales")}
+                        className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
+                        disabled={user.role === "sales"}
+                      >
+                        Hacer Ventas
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop view */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -201,14 +268,14 @@ export default function AdminUsersPage() {
                         <div className="flex space-x-2">
                           <button
                             onClick={() => handleRoleChange(user.id, "admin")}
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className="text-indigo-600 hover:text-indigo-900 disabled:opacity-50"
                             disabled={user.role === "admin"}
                           >
                             Hacer Admin
                           </button>
                           <button
                             onClick={() => handleRoleChange(user.id, "sales")}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
                             disabled={user.role === "sales"}
                           >
                             Hacer Ventas
