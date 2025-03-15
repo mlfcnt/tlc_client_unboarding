@@ -114,13 +114,6 @@ export default function AdminUsersPage() {
       <header className="bg-white shadow">
         <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={50}
-              height={50}
-              className="mr-3"
-            />
             <h1 className="text-xl font-bold text-gray-900">
               Gestión de Usuarios
             </h1>

@@ -1,5 +1,3 @@
-import Image from "next/image";
-import {UserButton} from "@clerk/nextjs";
 import {redirect} from "next/navigation";
 import {currentUser} from "@clerk/nextjs/server";
 import Link from "next/link";
@@ -26,30 +24,6 @@ export default async function SalesDashboard() {
 
     return (
       <div className="min-h-screen bg-gray-100">
-        {/* Header */}
-        <header className="bg-white shadow">
-          <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                width={50}
-                height={50}
-                className="mr-3"
-              />
-              <h1 className="text-xl font-bold text-gray-900">
-                Panel de Ventas
-              </h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                {user.emailAddresses[0]?.emailAddress}
-              </span>
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </div>
-        </header>
-
         {/* Main content */}
         <main>
           <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">

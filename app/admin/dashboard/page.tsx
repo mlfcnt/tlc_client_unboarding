@@ -9,12 +9,14 @@ interface User {
   emailAddresses: Array<{emailAddress: string}>;
   firstName?: string | null;
   lastName?: string | null;
+  role?: string;
 }
 
 export default function AdminDashboard() {
   const {user, isLoaded, isSignedIn} = useUser();
   const router = useRouter();
   const [pendingUsers, setPendingUsers] = useState<User[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,16 +36,26 @@ export default function AdminDashboard() {
       }
     }
 
-    // Fetch pending users
-    const fetchPendingUsers = async () => {
+    // Fetch all users and pending users
+    const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/users/pending");
-        if (!response.ok) {
-          throw new Error("Failed to fetch pending users");
+        const [pendingResponse, allUsersResponse] = await Promise.all([
+          fetch("/api/users/pending"),
+          fetch("/api/users"),
+        ]);
+
+        if (!pendingResponse.ok || !allUsersResponse.ok) {
+          throw new Error("Failed to fetch users");
         }
-        const data = await response.json();
-        setPendingUsers(data.users);
+
+        const [pendingData, allUsersData] = await Promise.all([
+          pendingResponse.json(),
+          allUsersResponse.json(),
+        ]);
+
+        setPendingUsers(pendingData.users);
+        setAllUsers(allUsersData.users);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
@@ -52,7 +64,7 @@ export default function AdminDashboard() {
     };
 
     if (isLoaded && isSignedIn) {
-      fetchPendingUsers();
+      fetchUsers();
     }
   }, [isLoaded, isSignedIn, user?.publicMetadata?.role, router]);
 
@@ -81,6 +93,45 @@ export default function AdminDashboard() {
     }
   };
 
+  const updateUserRole = async (userId: string, newRole: string) => {
+    try {
+      const response = await fetch("/api/users", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          targetUserId: userId,
+          role: newRole,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user role");
+      }
+
+      // Refresh both user lists
+      const [pendingResponse, allUsersResponse] = await Promise.all([
+        fetch("/api/users/pending"),
+        fetch("/api/users"),
+      ]);
+
+      if (!pendingResponse.ok || !allUsersResponse.ok) {
+        throw new Error("Failed to refresh user lists");
+      }
+
+      const [pendingData, allUsersData] = await Promise.all([
+        pendingResponse.json(),
+        allUsersResponse.json(),
+      ]);
+
+      setPendingUsers(pendingData.users);
+      setAllUsers(allUsersData.users);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    }
+  };
+
   if (!isLoaded || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -101,7 +152,8 @@ export default function AdminDashboard() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Panel de Administración</h1>
 
-      <div className="bg-white rounded-lg shadow p-6">
+      {/* Pending Users Section */}
+      <div className="bg-white rounded-lg shadow p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4">Usuarios Pendientes</h2>
 
         {pendingUsers.length === 0 ? (
@@ -142,6 +194,62 @@ export default function AdminDashboard() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* All Users Section */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold mb-4">Todos los Usuarios</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Nombre
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Rol
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {allUsers.map((user) => (
+                <tr key={user.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {user.firstName} {user.lastName}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500">
+                      {user.emailAddresses[0]?.emailAddress}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <select
+                      value={user.role || "pending"}
+                      onChange={(e) => updateUserRole(user.id, e.target.value)}
+                      className={`px-2 py-1 text-sm font-semibold rounded border
+                        ${
+                          user.role === "admin"
+                            ? "border-purple-200 bg-purple-50 text-purple-800"
+                            : user.role === "sales"
+                            ? "border-blue-200 bg-blue-50 text-blue-800"
+                            : "border-gray-200 bg-gray-50 text-gray-800"
+                        }`}
+                    >
+                      <option value="pending">Pendiente</option>
+                      <option value="sales">Ventas</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -27,21 +27,25 @@ export async function GET() {
     }
 
     // Get all users
-    const {data: allUsers} = await clerkClient.users.getUserList();
-    // Filter users without a role
-    const users = allUsers.filter((user: User) => {
-      const role = user.publicMetadata?.role;
-      return !role || role === "";
-    });
+    const {data: users} = await clerkClient.users.getUserList();
 
-    return NextResponse.json({users});
+    // Map users to include only necessary information
+    const mappedUsers = users.map((user: User) => ({
+      id: user.id,
+      emailAddresses: user.emailAddresses,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.publicMetadata?.role || "pending",
+    }));
+
+    return NextResponse.json({users: mappedUsers});
   } catch (error) {
-    console.error("Error fetching pending users:", error);
+    console.error("Error fetching users:", error);
     return NextResponse.json({error: "Internal server error"}, {status: 500});
   }
 }
 
-export async function POST(request: Request) {
+export async function PUT(request: Request) {
   try {
     const session = await auth();
     const userId = session.userId;
@@ -73,13 +77,13 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!["admin", "sales"].includes(role)) {
+    if (!["admin", "sales", "pending"].includes(role)) {
       return NextResponse.json({error: "Invalid role"}, {status: 400});
     }
 
-    // Update user's role
+    // Update user's role - if pending, clear the role
     await clerkClient.users.updateUser(targetUserId, {
-      publicMetadata: {role},
+      publicMetadata: {role: role === "pending" ? "" : role},
     });
 
     return NextResponse.json({success: true});
