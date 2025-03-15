@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {UserButton} from "@clerk/nextjs";
 import {currentUser} from "@clerk/nextjs/server";
 import Link from "next/link";
