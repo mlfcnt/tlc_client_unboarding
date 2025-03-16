@@ -19,6 +19,7 @@ import {InputOTPSlot} from "@/components/ui/input-otp";
 import {InputOTP, InputOTPGroup} from "@/components/ui/input-otp";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
 import {useToast} from "@/hooks/use-toast";
+import {redirect} from "next/navigation";
 export const TestingRequest = () => {
   const {toast} = useToast();
 
@@ -67,6 +68,7 @@ export const TestingRequest = () => {
         description: "Request saved successfully",
         className: "bg-green-500",
       });
+      redirect("/dashboard");
     }
   };
 

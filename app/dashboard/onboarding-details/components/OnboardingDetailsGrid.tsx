@@ -47,8 +47,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {supabase} from "@/lib/supabase";
+import {useToast} from "@/hooks/use-toast";
 
 // Updated type to match actual data structure
 export type OnboardingRequest = {
@@ -62,128 +63,13 @@ export type OnboardingRequest = {
   updated_at: string;
 };
 
-export const columns: ColumnDef<OnboardingRequest>[] = [
-  {
-    id: "select",
-    header: () => null,
-    cell: ({row}) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id_number",
-    header: ({column}: {column: Column<OnboardingRequest>}) => {
-      return (
-        <Button
-          variant="noShadow"
-          size="sm"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({row}) => <div>{row.getValue("id_number")}</div>,
-    enableHiding: true,
-  },
-  {
-    id: "name",
-    header: "Name",
-    cell: ({row}) => {
-      const firstName = row.original.first_name;
-      const lastName = row.original.last_name;
-      return <div>{`${firstName} ${lastName}`}</div>;
-    },
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({row}) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({row}) => {
-      const status = row.getValue("status") as keyof typeof OnboardingStatuses;
-      const statusText = OnboardingStatuses[status];
-
-      return (
-        <div
-          className={`capitalize font-medium rounded-full px-2.5 py-0.5 text-xs inline-flex items-center justify-center ${
-            status === "test_requested" || status === "awaiting_payment_link"
-              ? "bg-yellow-100 text-yellow-800"
-              : status === "test_done" || status === "payed"
-              ? "bg-green-100 text-green-800"
-              : status === "denied_payment" || status === "refused_schedule"
-              ? "bg-red-100 text-red-800"
-              : "bg-blue-100 text-blue-800"
-          }`}
-        >
-          {statusText}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "created_at",
-    header: "Created At",
-    cell: ({row}) => {
-      const date = new Date(row.getValue("created_at"));
-      return <div>{date.toLocaleDateString()}</div>;
-    },
-    enableHiding: true,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({row}) => {
-      const request = row.original;
-      const status = request.status;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="noShadow" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View details</DropdownMenuItem>
-            {status === "test_requested" && (
-              <>
-                <DropdownMenuItem>Send test</DropdownMenuItem>
-                <DropdownMenuItem>Cancel request</DropdownMenuItem>
-              </>
-            )}
-            {status === "test_done" && (
-              <DropdownMenuItem>Notify sales level</DropdownMenuItem>
-            )}
-            {status === "awaiting_payment_link" && (
-              <DropdownMenuItem>Send payment link</DropdownMenuItem>
-            )}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Contact client</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
 export const OnboardingDetailsGrid = ({
   filterByStatus,
 }: {
   filterByStatus?: keyof typeof OnboardingStatuses;
 }) => {
+  const queryClient = useQueryClient();
+  const {toast} = useToast();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     filterByStatus ? [{id: "status", value: filterByStatus}] : []
@@ -210,6 +96,154 @@ export const OnboardingDetailsGrid = ({
       return data as OnboardingRequest[];
     },
   });
+
+  const columns: ColumnDef<OnboardingRequest>[] = [
+    {
+      id: "select",
+      header: () => null,
+      cell: ({row}) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "id_number",
+      header: ({column}: {column: Column<OnboardingRequest>}) => {
+        return (
+          <Button
+            variant="noShadow"
+            size="sm"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            ID
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({row}) => <div>{row.getValue("id_number")}</div>,
+      enableHiding: true,
+    },
+    {
+      id: "name",
+      header: "Name",
+      cell: ({row}) => {
+        const firstName = row.original.first_name;
+        const lastName = row.original.last_name;
+        return <div>{`${firstName} ${lastName}`}</div>;
+      },
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({row}) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({row}) => {
+        const status = row.getValue(
+          "status"
+        ) as keyof typeof OnboardingStatuses;
+        const statusText = OnboardingStatuses[status];
+
+        return (
+          <div
+            className={`capitalize font-medium rounded-full px-2.5 py-0.5 text-xs inline-flex items-center justify-center ${
+              status === "test_requested" || status === "awaiting_payment_link"
+                ? "bg-yellow-100 text-yellow-800"
+                : status === "test_done" || status === "payed"
+                ? "bg-green-100 text-green-800"
+                : status === "denied_payment" || status === "refused_schedule"
+                ? "bg-red-100 text-red-800"
+                : "bg-blue-100 text-blue-800"
+            }`}
+          >
+            {statusText}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "created_at",
+      header: "Created At",
+      cell: ({row}) => {
+        const date = new Date(row.getValue("created_at"));
+        return <div>{date.toLocaleDateString()}</div>;
+      },
+      enableHiding: true,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({row}) => {
+        const request = row.original;
+        const status = request.status;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="noShadow" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              {status === "test_requested" && (
+                <>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      try {
+                        fetch("/api/testing", {
+                          method: "POST",
+                          body: JSON.stringify({email: request.email}),
+                        });
+                        toast({
+                          title: "Success",
+                          description: "Test sent successfully",
+                          className: "bg-green-500",
+                        });
+                        await supabase
+                          .from("onboarding_requests")
+                          .update({
+                            status: "test_sent",
+                          })
+                          .eq("id", request.id);
+                        queryClient.invalidateQueries({
+                          queryKey: ["onboardingRequests"],
+                        });
+                      } catch (error) {
+                        console.error(error);
+                        toast({
+                          title: "Error",
+                          description: "Failed to send the test",
+                        });
+                      }
+                    }}
+                  >
+                    Send test
+                  </DropdownMenuItem>
+                </>
+              )}
+              {/* {status === "test_done" && (
+                <DropdownMenuItem>Notify sales level</DropdownMenuItem>
+              )}
+              {status === "awaiting_payment_link" && (
+                <DropdownMenuItem>Send payment link</DropdownMenuItem>
+              )} */}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Contact client</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
     data: data || [],

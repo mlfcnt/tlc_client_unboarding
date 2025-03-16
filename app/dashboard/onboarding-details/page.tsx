@@ -5,7 +5,9 @@ import {OnboardingDetailsGrid} from "./components/OnboardingDetailsGrid";
 import {redirect, useSearchParams} from "next/navigation";
 import {OnboardingStatuses} from "@/app/constants/OnboardingStatuses";
 import {useUser} from "@clerk/nextjs";
-export default function OnboardingDetailsPage() {
+import {Suspense} from "react";
+
+function OnboardingDetailsContent() {
   const queryParams = useSearchParams();
   const filterByStatus = queryParams.get(
     "status"
@@ -18,9 +20,16 @@ export default function OnboardingDetailsPage() {
   if (!isAdmin) {
     redirect("/dashboard");
   }
+
+  return <OnboardingDetailsGrid filterByStatus={filterByStatus} />;
+}
+
+export default function OnboardingDetailsPage() {
   return (
     <Page title="Onboarding Details">
-      <OnboardingDetailsGrid filterByStatus={filterByStatus} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <OnboardingDetailsContent />
+      </Suspense>
     </Page>
   );
 }
