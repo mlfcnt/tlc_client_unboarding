@@ -1,5 +1,4 @@
-import {UserButton} from "@clerk/nextjs";
-import {currentUser} from "@clerk/nextjs/server";
+import {currentUser, clerkClient as clerk} from "@clerk/nextjs/server";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 
@@ -37,41 +36,17 @@ export default async function RolePendingPage() {
         redirectPath = "/dashboard";
       } else {
         // User is authenticated but has no role, show pending page
-        return (
-          <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-              <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Cuenta Pendiente de Aprobación
-                </h1>
-                <p className="mt-4 text-gray-600">
-                  Su cuenta ha sido creada correctamente, pero necesita ser
-                  asignada a un rol por un administrador.
-                </p>
-                <p className="mt-2 text-gray-600">
-                  Por favor, contacte al administrador del sistema para obtener
-                  acceso.
-                </p>
-
-                <div className="flex items-center justify-center mt-8 space-x-4">
-                  <UserButton afterSignOutUrl="/" />
-                  <span className="text-sm text-gray-500">
-                    {user.emailAddresses[0]?.emailAddress}
-                  </span>
-                </div>
-
-                <div className="mt-8">
-                  <Link
-                    href="/"
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                  >
-                    Volver al inicio
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+        const clerkClient = await clerk();
+        const updatedUser = await clerkClient.users.updateUserMetadata(
+          user.id,
+          {
+            unsafeMetadata: {
+              role: "sales",
+            },
+          }
         );
+        console.log("Role-pending page: Updated user:", updatedUser);
+        redirectPath = "/dashboard";
       }
     }
   } catch (error) {
