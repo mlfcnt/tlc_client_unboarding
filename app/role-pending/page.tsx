@@ -40,7 +40,7 @@ export default async function RolePendingPage() {
         const updatedUser = await clerkClient.users.updateUserMetadata(
           user.id,
           {
-            unsafeMetadata: {
+            publicMetadata: {
               role: "sales",
             },
           }
