@@ -1,19 +1,32 @@
 "use client";
 
 import React from "react";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 
 export const NewTestingRequest = () => {
+  const router = useRouter();
+
   return (
-    <Button
-      className="text-xl cursor-pointer"
-      onClick={() => {
-        redirect("/dashboard/testing-request");
-      }}
-    >
-      <span>Submit a new test request</span>
-    </Button>
+    <Card className="hover:shadow-md transition-all">
+      <CardHeader>
+        <CardTitle>Test Request</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-gray-500 mb-4">
+          Create a new testing request for a student
+        </p>
+        <Button
+          className="w-full"
+          onClick={() => {
+            router.push("/dashboard/testing-request");
+          }}
+        >
+          Submit a new test request
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 

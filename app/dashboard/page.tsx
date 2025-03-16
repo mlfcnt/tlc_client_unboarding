@@ -1,32 +1,58 @@
 import {currentUser} from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
 import {ROLES} from "../constants/Roles";
-import Page from "../components/Page";
-import {UsersListSummary} from "./components/UsersListSummary";
-import NewTestingRequest from "./components/NewTestingRequest";
-import {OnboardingSummary} from "./components/OnboardingSummary";
-import {NotifyTestingDone} from "./components/NotifyTestingDone";
+import {Plus} from "lucide-react";
+import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {Button} from "@/components/ui/button";
 
+import {AdminTasks} from "./components/AdminTasks/AdminTasks";
+import {SalesTasks} from "./components/SalesTasks/SalesTasks";
+import {Overview} from "./components/Overview/Overview";
 export default async function DashboardPage() {
   const user = await currentUser();
   const userRole = user?.publicMetadata.role as keyof typeof ROLES;
   if (!user || !userRole || ![ROLES.admin, ROLES.sales].includes(userRole)) {
     redirect("/sign-in");
   }
-  const isAdmin = userRole === ROLES.admin;
+
   try {
-    // Dashboard content for authorized users
     return (
-      <Page title="Dashboard">
-        <div className="bg-white border-4 rounded-2xl overflow-hidden">
-          {isAdmin ? <OnboardingSummary /> : null}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-            {isAdmin ? <UsersListSummary /> : null}
-            <NewTestingRequest />
-            <NotifyTestingDone />
-          </div>
+      <div className="flex min-h-screen flex-col bg-[#ffdddd]">
+        <div className="flex flex-1">
+          <main className="flex-1 p-6">
+            <div className="mb-6 flex items-center justify-between">
+              <h1 className="text-3xl font-bold">Dashboard</h1>
+            </div>
+
+            <Tabs defaultValue="overview" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-3 gap-4 bg-transparent border-none">
+                <TabsTrigger
+                  value="overview"
+                  className="border-2 border-black bg-white data-[state=active]:bg-[#FFD166] data-[state=active]:text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer"
+                >
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="admin"
+                  className="border-2 border-black bg-white data-[state=active]:bg-[#06D6A0] data-[state=active]:text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer"
+                >
+                  Admin Tasks
+                </TabsTrigger>
+                <TabsTrigger
+                  value="sales"
+                  className="border-2 border-black bg-white data-[state=active]:bg-[#118AB2] data-[state=active]:text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer"
+                >
+                  Sales Tasks
+                </TabsTrigger>
+              </TabsList>
+
+              <Overview />
+              <AdminTasks />
+              <SalesTasks />
+            </Tabs>
+          </main>
         </div>
-      </Page>
+      </div>
     );
   } catch (error) {
     console.error("Error in Dashboard page:", error);

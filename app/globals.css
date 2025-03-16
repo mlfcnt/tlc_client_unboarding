@@ -4,6 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+button {
+  @apply cursor-pointer;
+}
+
 :root {
   --main: #ff6b6b;
   --overlay: rgba(

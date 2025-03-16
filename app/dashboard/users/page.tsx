@@ -64,13 +64,15 @@ export default function Users() {
   );
 }
 
-function UserRoleDropdown({
+export const UserRoleDropdown = ({
   userId,
   currentRole,
+  readOnly = true,
 }: {
   userId: string;
   currentRole?: string;
-}) {
+  readOnly?: boolean;
+}) => {
   const queryClient = useQueryClient();
   const {
     mutate: updateUserRole,
@@ -101,6 +103,17 @@ function UserRoleDropdown({
     });
   };
 
+  if (readOnly) {
+    return (
+      <span className="px-3 py-1 border-2 border-border rounded-base bg-main">
+        {currentRole === ROLES.admin
+          ? "Admin"
+          : currentRole === ROLES.sales
+          ? "Sales"
+          : "None"}
+      </span>
+    );
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -135,4 +148,4 @@ function UserRoleDropdown({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};

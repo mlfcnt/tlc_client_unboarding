@@ -11,22 +11,55 @@ export default function Header() {
 
   return (
     // use the css variable blank for the background color
-    <Card className="mfixed left-0 top-0 z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-border dark:border-darkNavBorder bg-white dark:bg-secondaryBlack px-5 m500:h-16 ">
-      <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-2 sm:space-x-3">
-          <Image
-            src="/logo.png"
-            alt="TLC Logo"
-            width={32}
-            height={32}
-            className="sm:w-[40px] sm:h-[40px]"
-            priority
-          />
+    // <Card className="mfixed left-0 top-0 z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-border dark:border-darkNavBorder bg-bg dark:bg-secondaryBlack px-5 m500:h-16 ">
+    //   <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+    //     <div className="flex items-center space-x-2 sm:space-x-3">
+    //       <Image
+    //         src="/logo.png"
+    //         alt="TLC Logo"
+    //         width={32}
+    //         height={32}
+    //         className="sm:w-[40px] sm:h-[40px]"
+    //         priority
+    //       />
+    //       <span
+    //         className="font-semibold text-lg sm:text-xl cursor-pointer"
+    // onClick={() => {
+    //   redirect("/dashboard");
+    // }}
+    //       >
+    //         TLC Onboarding
+    //       </span>
+    //     </div>
+    // {user ? (
+    //   <div className="flex items-center space-x-2 sm:space-x-4">
+    //     <span className="text-gray-600 text-sm sm:text-base hidden sm:inline">
+    //       Hola {user?.firstName} :)
+    //     </span>
+    //     <UserButton />
+    //   </div>
+    // ) : null}
+    //   </div>
+    // </Card>
+    <header className="sticky top-0 z-10 border-b-4 border-black bg-bg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+      <div className="flex h-16 items-center justify-between px-6">
+        <div className="flex items-center gap-2 font-bold text-2xl">
+          <div className="flex space-x-1">
+            {["#FF5757", "#FFD166", "#06D6A0", "#118AB2", "#073B4C"].map(
+              (color, i) => (
+                <div
+                  key={i}
+                  className="w-3 h-8"
+                  style={{backgroundColor: color}}
+                ></div>
+              )
+            )}
+          </div>
           <span
-            className="font-semibold text-lg sm:text-xl cursor-pointer"
             onClick={() => {
               redirect("/dashboard");
             }}
+            className="cursor-pointer"
           >
             TLC Onboarding
           </span>
@@ -40,6 +73,6 @@ export default function Header() {
           </div>
         ) : null}
       </div>
-    </Card>
+    </header>
   );
 }

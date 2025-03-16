@@ -18,6 +18,7 @@ import {supabase} from "@/lib/supabase";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import React, {useState} from "react";
 import {OnboardingRequest} from "../onboarding-details/components/OnboardingDetailsGrid";
+import {CheckCircle} from "lucide-react";
 
 export const NotifyTestingDone = () => {
   const {toast} = useToast();
@@ -75,17 +76,20 @@ export const NotifyTestingDone = () => {
   });
 
   return (
-    <Card>
+    <Card className="hover:shadow-md transition-all">
       <CardHeader>
-        <CardTitle>Confirm testing completed</CardTitle>
+        <CardTitle>Testing Status</CardTitle>
       </CardHeader>
       <CardContent>
+        <p className="text-gray-500 mb-4">Mark student tests as completed</p>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="flex items-center justify-center p-4">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+          </div>
         ) : pendingTesting?.data?.length ? (
-          <div className="flex justify-center p-2">
+          <div className="flex flex-col gap-4">
             <Select onValueChange={setSelectedRequestId}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a student" />
               </SelectTrigger>
               <SelectContent>
@@ -98,7 +102,7 @@ export const NotifyTestingDone = () => {
             </Select>
             <Button
               type="submit"
-              className="ml-2 cursor-pointer"
+              className="w-full cursor-pointer"
               disabled={!selectedRequestId}
               onClick={async () => {
                 if (selectedRequestId) {
@@ -122,11 +126,14 @@ export const NotifyTestingDone = () => {
                 }
               }}
             >
+              <CheckCircle className="mr-2 h-4 w-4" />
               Update status
             </Button>
           </div>
         ) : (
-          <p>No pending testing requests</p>
+          <p className="text-center text-gray-500 py-2">
+            No pending testing requests
+          </p>
         )}
       </CardContent>
     </Card>
