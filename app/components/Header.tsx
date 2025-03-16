@@ -25,7 +25,7 @@ export default function Header() {
           <span
             className="font-semibold text-lg sm:text-xl cursor-pointer"
             onClick={() => {
-              redirect("/role-pending");
+              redirect("/dashboard");
             }}
           >
             TLC Onboarding

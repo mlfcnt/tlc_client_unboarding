@@ -123,19 +123,27 @@ export const TestingRequest = () => {
               <FormLabel>ID number</FormLabel>
               <FormControl className="flex gap-2">
                 <InputOTP
-                  maxLength={6}
+                  maxLength={10}
                   {...field}
                   value={field.value?.toString()}
                   pattern={REGEXP_ONLY_DIGITS}
                 >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
+                  <div className="flex flex-wrap gap-5">
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                    </InputOTPGroup>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={5} />
+                      <InputOTPSlot index={6} />
+                      <InputOTPSlot index={7} />
+                      <InputOTPSlot index={8} />
+                      <InputOTPSlot index={9} />
+                    </InputOTPGroup>
+                  </div>
                 </InputOTP>
               </FormControl>
               <FormMessage />

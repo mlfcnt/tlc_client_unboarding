@@ -19,46 +19,47 @@ export default function Users() {
   });
 
   const users = data ?? [];
-  if (isLoading) return <div>Loading users...</div>;
-
-  if (isLoading || !users) return <div>No users found</div>;
 
   return (
     <Page title="Users">
-      <div className="mt-6">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100 border-b-2 border-gray-200">
-                <th className="px-4 py-2 text-left">Name</th>
-                <th className="px-4 py-2 text-left">Email</th>
-                <th className="px-4 py-2 text-left">Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr
-                  key={user.id}
-                  className="border-b border-gray-200 hover:bg-gray-50"
-                >
-                  <td className="px-4 py-2">
-                    {user.firstName} {user.lastName}
-                  </td>
-                  <td className="px-4 py-2">
-                    {user.emailAddresses[0]?.emailAddress}
-                  </td>
-                  <td className="px-4 py-2">
-                    <UserRoleDropdown
-                      userId={user.id}
-                      currentRole={user.publicMetadata?.role}
-                    />
-                  </td>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="mt-6">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100 border-b-2 border-gray-200">
+                  <th className="px-4 py-2 text-left">Name</th>
+                  <th className="px-4 py-2 text-left">Email</th>
+                  <th className="px-4 py-2 text-left">Role</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr
+                    key={user.id}
+                    className="border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    <td className="px-4 py-2">
+                      {user.firstName} {user.lastName}
+                    </td>
+                    <td className="px-4 py-2">
+                      {user.emailAddresses[0]?.emailAddress}
+                    </td>
+                    <td className="px-4 py-2">
+                      <UserRoleDropdown
+                        userId={user.id}
+                        currentRole={user.publicMetadata?.role}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </Page>
   );
 }
