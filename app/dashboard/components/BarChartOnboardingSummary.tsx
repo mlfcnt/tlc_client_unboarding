@@ -4,6 +4,7 @@ import {OnboardingStatuses} from "@/app/constants/OnboardingStatuses";
 import {ChartConfig, ChartContainer, ChartTooltip} from "@/components/ui/chart";
 import {supabase} from "@/lib/supabase";
 import {useQuery} from "@tanstack/react-query";
+import {useRouter} from "next/navigation";
 import {
   Bar,
   BarChart,
@@ -49,8 +50,10 @@ const CustomTooltip = ({active, payload}: TooltipProps<number, string>) => {
 };
 
 export const BarChartOnboardingSummary = () => {
+  const router = useRouter();
+
   const {data: onboardingData, isLoading} = useQuery({
-    queryKey: ["onboarding-requests"],
+    queryKey: ["onboardingDetails"],
     queryFn: async () => supabase.from("onboarding_requests").select(),
   });
 
@@ -150,7 +153,16 @@ export const BarChartOnboardingSummary = () => {
           />
           <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={35}>
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.fill} />
+              <Cell
+                key={`cell-${index}`}
+                fill={entry.fill}
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push(
+                    `/dashboard/onboarding-details?status=${entry.status}`
+                  );
+                }}
+              />
             ))}
           </Bar>
         </BarChart>
