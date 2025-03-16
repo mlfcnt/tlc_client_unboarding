@@ -18,7 +18,10 @@ import {supabase} from "@/lib/supabase";
 import {InputOTPSlot} from "@/components/ui/input-otp";
 import {InputOTP, InputOTPGroup} from "@/components/ui/input-otp";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
+import {useToast} from "@/hooks/use-toast";
 export const TestingRequest = () => {
+  const {toast} = useToast();
+
   const formSchema = z.object({
     firstName: z.string().min(2, {
       message: "First name must be at least 2 characters.",
@@ -45,18 +48,28 @@ export const TestingRequest = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const {data, error} = await supabase.from("onboarding_requests").insert({
-      first_name: values.firstName,
-      last_name: values.lastName,
-      email: values.email,
-      id_number: +values.idNumber,
-      status: "test_requested",
-    });
-    if (error) {
-      console.error(error);
-    }
-    if (data) {
-      console.log(data);
+    const {data, error, status} = await supabase
+      .from("onboarding_requests")
+      .insert({
+        first_name: values.firstName,
+        last_name: values.lastName,
+        email: values.email,
+        id_number: +values.idNumber,
+        status: "test_requested",
+      });
+
+    console.log({status});
+    if (status !== 201) {
+      toast({
+        title: "Error",
+        description: "Failed to save the request",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Request saved successfully",
+        className: "bg-green-500",
+      });
     }
   };
 
