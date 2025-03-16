@@ -26,12 +26,8 @@ export const NotifyTestingDone = () => {
     OnboardingRequest["id"] | null
   >(null);
 
-  console.log({selectedRequestId});
   const {data: pendingTesting, isLoading} = useQuery({
-    queryKey: [
-      "onboardingRequests",
-      getKeyFromValue(OnboardingStatuses.test_done),
-    ],
+    queryKey: ["onboardingRequests"],
     queryFn: async () => {
       const {data, error} = await supabase
         .from("onboarding_requests")
@@ -46,6 +42,8 @@ export const NotifyTestingDone = () => {
       return data;
     },
   });
+
+  console.log({pendingTesting});
 
   const {mutateAsync: notifyTestingDone} = useMutation({
     mutationFn: async (onboardingRequestId: string) => {
@@ -84,7 +82,7 @@ export const NotifyTestingDone = () => {
       <CardContent>
         {isLoading ? (
           <div>Loading...</div>
-        ) : (
+        ) : pendingTesting?.length ? (
           <div className="flex justify-center p-2">
             <Select onValueChange={setSelectedRequestId}>
               <SelectTrigger className="w-[180px]">
@@ -127,6 +125,8 @@ export const NotifyTestingDone = () => {
               Update status
             </Button>
           </div>
+        ) : (
+          <p>No pending testing requests</p>
         )}
       </CardContent>
     </Card>

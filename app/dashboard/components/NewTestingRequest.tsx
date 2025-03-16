@@ -4,7 +4,7 @@ import React from "react";
 import {redirect} from "next/navigation";
 import {Button} from "@/components/ui/button";
 
-export const NewTestingRequestSummary = () => {
+export const NewTestingRequest = () => {
   return (
     <Button
       className="text-xl cursor-pointer"
@@ -17,4 +17,4 @@ export const NewTestingRequestSummary = () => {
   );
 };
 
-export default NewTestingRequestSummary;
+export default NewTestingRequest;

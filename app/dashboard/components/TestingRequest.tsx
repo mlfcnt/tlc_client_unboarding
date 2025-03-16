@@ -20,9 +20,12 @@ import {InputOTP, InputOTPGroup} from "@/components/ui/input-otp";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
 import {useToast} from "@/hooks/use-toast";
 import {redirect} from "next/navigation";
+import {useUser} from "@clerk/nextjs";
+import {useQueryClient} from "@tanstack/react-query";
 export const TestingRequest = () => {
   const {toast} = useToast();
-
+  const {user} = useUser();
+  const queryClient = useQueryClient();
   const formSchema = z.object({
     firstName: z.string().min(2, {
       message: "First name must be at least 2 characters.",
@@ -55,6 +58,11 @@ export const TestingRequest = () => {
       email: values.email,
       id_number: +values.idNumber,
       status: "test_requested",
+      sales_email: user?.emailAddresses[0].emailAddress,
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: ["onboardingRequests"],
     });
 
     if (status !== 201) {

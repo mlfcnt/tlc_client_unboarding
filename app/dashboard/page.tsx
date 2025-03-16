@@ -3,7 +3,7 @@ import {redirect} from "next/navigation";
 import {ROLES} from "../constants/Roles";
 import Page from "../components/Page";
 import {UsersListSummary} from "./components/UsersListSummary";
-import NewTestingRequestSummary from "./components/NewTestingRequestSummary";
+import NewTestingRequest from "./components/NewTestingRequest";
 import {OnboardingSummary} from "./components/OnboardingSummary";
 import {NotifyTestingDone} from "./components/NotifyTestingDone";
 
@@ -22,7 +22,7 @@ export default async function DashboardPage() {
           {isAdmin ? <OnboardingSummary /> : null}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             {isAdmin ? <UsersListSummary /> : null}
-            <NewTestingRequestSummary />
+            <NewTestingRequest />
             <NotifyTestingDone />
           </div>
         </div>

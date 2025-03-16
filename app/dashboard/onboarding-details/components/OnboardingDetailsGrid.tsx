@@ -21,10 +21,8 @@ import {ArrowUpDown, ChevronDown, MoreHorizontal} from "lucide-react";
 import * as React from "react";
 
 import {Button} from "@/components/ui/button";
-import {Checkbox} from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -50,6 +48,7 @@ import {
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {supabase} from "@/lib/supabase";
 import {useToast} from "@/hooks/use-toast";
+import {SendLevelDialog} from "../../components/SendLevelDialog";
 
 // Updated type to match actual data structure
 export type OnboardingRequest = {
@@ -61,6 +60,7 @@ export type OnboardingRequest = {
   status: keyof typeof OnboardingStatuses;
   created_at: string;
   updated_at: string;
+  sales_email: string;
 };
 
 export const OnboardingDetailsGrid = ({
@@ -69,6 +69,9 @@ export const OnboardingDetailsGrid = ({
   filterByStatus?: keyof typeof OnboardingStatuses;
 }) => {
   const queryClient = useQueryClient();
+  const [showSendLevelDialog, setShowSendLevelDialog] = React.useState(false);
+  const [selectedUser, setSelectedUser] =
+    React.useState<OnboardingRequest | null>(null);
   const {toast} = useToast();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -98,19 +101,6 @@ export const OnboardingDetailsGrid = ({
   });
 
   const columns: ColumnDef<OnboardingRequest>[] = [
-    {
-      id: "select",
-      header: () => null,
-      cell: ({row}) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "id_number",
       header: ({column}: {column: Column<OnboardingRequest>}) => {
@@ -230,12 +220,17 @@ export const OnboardingDetailsGrid = ({
                   </DropdownMenuItem>
                 </>
               )}
-              {/* {status === "test_done" && (
-                <DropdownMenuItem>Notify sales level</DropdownMenuItem>
+              {status === "test_done" && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShowSendLevelDialog(true);
+                    setSelectedUser(request);
+                  }}
+                >
+                  Notify sales level
+                </DropdownMenuItem>
               )}
-              {status === "awaiting_payment_link" && (
-                <DropdownMenuItem>Send payment link</DropdownMenuItem>
-              )} */}
+
               <DropdownMenuSeparator />
               <DropdownMenuItem>Contact client</DropdownMenuItem>
             </DropdownMenuContent>
@@ -275,134 +270,130 @@ export const OnboardingDetailsGrid = ({
   if (isLoading) return <div>Loading the onboarding details...</div>;
 
   return (
-    <div className="flex flex-col gap-4 p-4 max-w-screen-xl mx-auto">
-      <div className="w-full font-base">
-        <div className="flex items-center py-4">
-          <Select
-            onValueChange={(value: string) => {
-              if (value === "all") {
-                table.getColumn("status")?.setFilterValue(undefined);
-                // Clear the column filter for status
-                setColumnFilters(
-                  columnFilters.filter((f) => f.id !== "status")
-                );
-              } else {
-                table.getColumn("status")?.setFilterValue(value);
-              }
-            }}
-            defaultValue={filterByStatus || "all"}
-            value={
-              columnFilters.find((f) => f.id === "status")
-                ? (columnFilters.find((f) => f.id === "status")
-                    ?.value as string)
-                : "all"
-            }
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              {Object.entries(OnboardingStatuses).map(([key, value]) => (
-                <SelectItem key={key} value={key}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="noShadow" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
+    <>
+      <div className="flex flex-col gap-4 p-4 max-w-screen-xl mx-auto">
+        <div className="w-full font-base">
+          <div className="flex items-center py-4">
+            <Select
+              onValueChange={(value: string) => {
+                if (value === "all") {
+                  table.getColumn("status")?.setFilterValue(undefined);
+                  // Clear the column filter for status
+                  setColumnFilters(
+                    columnFilters.filter((f) => f.id !== "status")
                   );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader className="font-heading ">
-              {table
-                .getHeaderGroups()
-                .map((headerGroup: HeaderGroup<OnboardingRequest>) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map(
-                      (header: Header<OnboardingRequest, unknown>) => {
-                        return (
-                          <TableHead key={header.id}>
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                          </TableHead>
-                        );
-                      }
-                    )}
-                  </TableRow>
+                } else {
+                  table.getColumn("status")?.setFilterValue(value);
+                }
+              }}
+              defaultValue={filterByStatus || "all"}
+              value={
+                columnFilters.find((f) => f.id === "status")
+                  ? (columnFilters.find((f) => f.id === "status")
+                      ?.value as string)
+                  : "all"
+              }
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {Object.entries(OnboardingStatuses).map(([key, value]) => (
+                  <SelectItem key={key} value={key}>
+                    {value}
+                  </SelectItem>
                 ))}
-            </TableHeader>
-            <TableBody>
-              {table.getFilteredRowModel().rows?.length ? (
-                table
-                  .getFilteredRowModel()
-                  .rows.map((row: Row<OnboardingRequest>) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row
-                        .getVisibleCells()
-                        .map((cell: Cell<OnboardingRequest, unknown>) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        ))}
+              </SelectContent>
+            </Select>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="noShadow" className="ml-auto">
+                  Columns <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+            </DropdownMenu>
+          </div>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader className="font-heading ">
+                {table
+                  .getHeaderGroups()
+                  .map((headerGroup: HeaderGroup<OnboardingRequest>) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map(
+                        (header: Header<OnboardingRequest, unknown>) => {
+                          return (
+                            <TableHead key={header.id}>
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                            </TableHead>
+                          );
+                        }
+                      )}
                     </TableRow>
-                  ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+                  ))}
+              </TableHeader>
+              <TableBody>
+                {table.getFilteredRowModel().rows?.length ? (
+                  table
+                    .getFilteredRowModel()
+                    .rows.map((row: Row<OnboardingRequest>) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                      >
+                        {row
+                          .getVisibleCells()
+                          .map((cell: Cell<OnboardingRequest, unknown>) => (
+                            <TableCell key={cell.id}>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex-1 text-sm">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {selectedUser && (
+        <SendLevelDialog
+          show={showSendLevelDialog}
+          setShow={() => setShowSendLevelDialog((current) => !current)}
+          userInfo={{
+            email: selectedUser.email,
+            firstname: selectedUser.first_name,
+            lastname: selectedUser.last_name,
+          }}
+          adminEmail={selectedUser.sales_email}
+          requestId={selectedUser.id}
+        />
+      )}
+    </>
   );
 };
