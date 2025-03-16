@@ -35,6 +35,7 @@ import {
   OnboardingStatuses,
 } from "@/app/constants/OnboardingStatuses";
 import {supabase} from "@/lib/supabase";
+import {LEVELS} from "@/app/constants/levels";
 
 export const SendLevelDialog = ({
   show,
@@ -106,6 +107,8 @@ export const SendLevelDialog = ({
         .from("onboarding_requests")
         .update({
           status: getKeyFromValue(OnboardingStatuses.notified_level_sales),
+          level: values.level,
+          start_date: values.startDate.toISOString(),
         })
         .eq("id", requestId);
       queryClient.invalidateQueries({queryKey: ["onboardingRequests"]});
@@ -148,12 +151,11 @@ export const SendLevelDialog = ({
                           <SelectValue placeholder="Select level" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="A1">A1</SelectItem>
-                          <SelectItem value="A2">A2</SelectItem>
-                          <SelectItem value="B1">B1</SelectItem>
-                          <SelectItem value="B2">B2</SelectItem>
-                          <SelectItem value="C1">C1</SelectItem>
-                          <SelectItem value="C2">C2</SelectItem>
+                          {Object.values(LEVELS).map((level) => (
+                            <SelectItem key={level} value={level}>
+                              {level}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
