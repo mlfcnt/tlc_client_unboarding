@@ -77,7 +77,7 @@ export const NotifyTestingDone = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Confirm testing done</CardTitle>
+        <CardTitle>Confirm testing completed</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
