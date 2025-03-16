@@ -1,7 +1,6 @@
 import {currentUser} from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
 import {ROLES} from "../constants/Roles";
-import {Card, CardHeader, CardTitle} from "@/components/ui/card";
 import Page from "../components/Page";
 import {UsersListSummary} from "./components/UsersListSummary";
 import NewTestingRequestSummary from "./components/NewTestingRequestSummary";
