@@ -29,21 +29,21 @@ export const NotifyTestingDone = () => {
   const {data: pendingTesting, isLoading} = useQuery({
     queryKey: ["onboardingRequests"],
     queryFn: async () => {
-      const {data, error} = await supabase
+      const res = await supabase
         .from("onboarding_requests")
         .select("*")
         .eq("status", getKeyFromValue(OnboardingStatuses.test_sent));
-      if (error) {
+      if (res.error) {
         toast({
           title: "Error fetching pending testing",
-          description: error.message,
+          description: res.error.message,
         });
       }
-      return data;
+      return res.data as unknown as {
+        data: OnboardingRequest[];
+      };
     },
   });
-
-  console.log({pendingTesting});
 
   const {mutateAsync: notifyTestingDone} = useMutation({
     mutationFn: async (onboardingRequestId: string) => {
@@ -82,14 +82,14 @@ export const NotifyTestingDone = () => {
       <CardContent>
         {isLoading ? (
           <div>Loading...</div>
-        ) : pendingTesting?.length ? (
+        ) : pendingTesting?.data?.length ? (
           <div className="flex justify-center p-2">
             <Select onValueChange={setSelectedRequestId}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a student" />
               </SelectTrigger>
               <SelectContent>
-                {pendingTesting?.map((request) => (
+                {pendingTesting?.data?.map((request) => (
                   <SelectItem key={request.id} value={request.id}>
                     {request.first_name} {request.last_name}
                   </SelectItem>
