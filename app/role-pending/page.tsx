@@ -29,12 +29,12 @@ export default async function RolePendingPage() {
         console.log(
           "Role-pending page: User is admin, setting redirect to admin dashboard"
         );
-        redirectPath = "/admin/dashboard";
+        redirectPath = "/dashboard";
       } else if (role === "sales") {
         console.log(
           "Role-pending page: User is sales, setting redirect to sales dashboard"
         );
-        redirectPath = "/sales/dashboard";
+        redirectPath = "/dashboard";
       } else {
         // User is authenticated but has no role, show pending page
         return (
