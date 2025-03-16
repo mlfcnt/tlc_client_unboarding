@@ -48,17 +48,14 @@ export const TestingRequest = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const {data, error, status} = await supabase
-      .from("onboarding_requests")
-      .insert({
-        first_name: values.firstName,
-        last_name: values.lastName,
-        email: values.email,
-        id_number: +values.idNumber,
-        status: "test_requested",
-      });
+    const {status} = await supabase.from("onboarding_requests").insert({
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      id_number: +values.idNumber,
+      status: "test_requested",
+    });
 
-    console.log({status});
     if (status !== 201) {
       toast({
         title: "Error",
