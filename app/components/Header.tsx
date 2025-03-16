@@ -31,12 +31,14 @@ export default function Header() {
             TLC Onboarding
           </span>
         </div>
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          <span className="text-gray-600 text-sm sm:text-base hidden sm:inline">
-            Hola {user?.firstName} :)
-          </span>
-          <UserButton />
-        </div>
+        {user ? (
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <span className="text-gray-600 text-sm sm:text-base hidden sm:inline">
+              Hola {user?.firstName} :)
+            </span>
+            <UserButton />
+          </div>
+        ) : null}
       </div>
     </Card>
   );
