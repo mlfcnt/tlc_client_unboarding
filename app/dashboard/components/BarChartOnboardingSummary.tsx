@@ -53,7 +53,7 @@ export const BarChartOnboardingSummary = () => {
   const router = useRouter();
 
   const {data: onboardingData, isLoading} = useQuery({
-    queryKey: ["onboardingDetails"],
+    queryKey: ["onboardingRequests"],
     queryFn: async () => supabase.from("onboarding_requests").select(),
   });
 

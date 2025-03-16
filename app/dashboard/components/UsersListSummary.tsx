@@ -1,16 +1,18 @@
-import React from "react";
-import {Card, CardHeader, CardTitle} from "@/components/ui/card";
-import SeeMoreBtn from "../SeeAllBtn";
+"use client";
 
-export const UsersListSummary = async () => {
+import React from "react";
+import {Button} from "@/components/ui/button";
+import {redirect} from "next/navigation";
+
+export const UsersListSummary = () => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <div className="flex items-center">User List </div>
-          <SeeMoreBtn href="/dashboard/users" />
-        </CardTitle>
-      </CardHeader>
-    </Card>
+    <Button
+      className="text-xl cursor-pointer "
+      onClick={() => {
+        redirect("/dashboard/users");
+      }}
+    >
+      See the user list
+    </Button>
   );
 };

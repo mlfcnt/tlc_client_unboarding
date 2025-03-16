@@ -1,20 +1,19 @@
 "use client";
 
-import {Card, CardHeader, CardTitle} from "@/components/ui/card";
 import React from "react";
 import {redirect} from "next/navigation";
+import {Button} from "@/components/ui/button";
+
 export const NewTestingRequestSummary = () => {
   return (
-    <Card
-      className="cursor-pointer"
+    <Button
+      className="text-xl cursor-pointer"
       onClick={() => {
         redirect("/dashboard/testing-request");
       }}
     >
-      <CardHeader>
-        <CardTitle>New test request</CardTitle>
-      </CardHeader>
-    </Card>
+      <span>Submit a new test request</span>
+    </Button>
   );
 };
 

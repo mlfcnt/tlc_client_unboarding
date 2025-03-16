@@ -8,7 +8,7 @@ import SeeMoreBtn from "../SeeAllBtn";
 
 export const OnboardingSummary = () => {
   return (
-    <div className="flex flex-col gap-4 p-4 max-w-screen-xl mx-auto">
+    <div className="flex flex-col gap-4 p-4 xl mx-auto">
       <Card className="bg-white hover:bg-gray-50 transition-colors w-full">
         <CardHeader>
           <CardTitle>Onboarding summary</CardTitle>

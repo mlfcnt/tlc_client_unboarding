@@ -5,6 +5,7 @@ import Page from "../components/Page";
 import {UsersListSummary} from "./components/UsersListSummary";
 import NewTestingRequestSummary from "./components/NewTestingRequestSummary";
 import {OnboardingSummary} from "./components/OnboardingSummary";
+import {NotifyTestingDone} from "./components/NotifyTestingDone";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -22,6 +23,7 @@ export default async function DashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             {isAdmin ? <UsersListSummary /> : null}
             <NewTestingRequestSummary />
+            <NotifyTestingDone />
           </div>
         </div>
       </Page>
