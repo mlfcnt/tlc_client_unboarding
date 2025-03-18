@@ -13,7 +13,7 @@ export const CreateNewUserButton = () => {
         router.push("/dashboard/users/new");
       }}
     >
-      <span>Create a new user</span>
+      <span>Create a new lead</span>
     </Button>
   );
 };
