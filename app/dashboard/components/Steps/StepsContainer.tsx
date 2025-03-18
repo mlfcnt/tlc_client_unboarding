@@ -9,6 +9,7 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
 export const Steps = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  console.log(setCurrentStep);
   const [expandedStep, setExpandedStep] = useState<number | null>(1);
 
   const handleStepClick = (stepId: number) => {
