@@ -1,6 +1,6 @@
 "use client";
 import {Button} from "@/components/ui/button";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/router";
 import React from "react";
 
 const SeeMoreBtn = ({
@@ -10,12 +10,13 @@ const SeeMoreBtn = ({
   href: string;
   title?: string;
 }) => {
+  const router = useRouter();
   return (
     <Button
       variant="neutral"
       className="cursor-pointer"
       onClick={() => {
-        redirect(href);
+        router.push(href);
       }}
     >
       {title}

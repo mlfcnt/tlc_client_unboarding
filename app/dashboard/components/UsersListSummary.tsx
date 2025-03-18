@@ -2,14 +2,15 @@
 
 import React from "react";
 import {Button} from "@/components/ui/button";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/router";
 
 export const UsersListSummary = () => {
+  const router = useRouter();
   return (
     <Button
       className="text-xl cursor-pointer "
       onClick={() => {
-        redirect("/dashboard/users");
+        router.push("/dashboard/users");
       }}
     >
       See the user list

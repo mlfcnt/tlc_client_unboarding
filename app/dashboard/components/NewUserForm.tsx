@@ -16,14 +16,15 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {supabase} from "@/lib/supabase";
 import {useToast} from "@/hooks/use-toast";
-import {redirect} from "next/navigation";
 import {useUser} from "@clerk/nextjs";
 import {useQueryClient} from "@tanstack/react-query";
 import Page from "@/app/components/Page";
+import {useRouter} from "next/router";
 
 export const NewUserForm = () => {
   const {toast} = useToast();
   const {user} = useUser();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const formSchema = z.object({
     firstName: z.string().min(2, {
@@ -79,7 +80,7 @@ export const NewUserForm = () => {
         description: "Request saved successfully",
         className: "bg-green-500",
       });
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   };
 

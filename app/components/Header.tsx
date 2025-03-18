@@ -4,9 +4,10 @@ import {Card} from "@/components/ui/card";
 import {useUser} from "@clerk/nextjs";
 import {UserButton} from "@clerk/nextjs";
 import Image from "next/image";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
   const {user} = useUser();
 
   return (
@@ -25,7 +26,7 @@ export default function Header() {
           <span
             className="font-semibold text-lg sm:text-xl cursor-pointer"
             onClick={() => {
-              redirect("/dashboard");
+              router.push("/dashboard");
             }}
           >
             TLC Onboarding

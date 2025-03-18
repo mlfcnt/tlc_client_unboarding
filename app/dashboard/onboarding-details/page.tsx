@@ -2,12 +2,14 @@
 
 import Page from "@/app/components/Page";
 import {OnboardingDetailsGrid} from "./components/OnboardingDetailsGrid";
-import {redirect, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {OnboardingStatuses} from "@/app/constants/OnboardingStatuses";
 import {useUser} from "@clerk/nextjs";
 import {Suspense} from "react";
+import {useRouter} from "next/router";
 
 function OnboardingDetailsContent() {
+  const router = useRouter();
   const queryParams = useSearchParams();
   const filterByStatus = queryParams.get(
     "status"
@@ -18,7 +20,7 @@ function OnboardingDetailsContent() {
   const isAdmin = user?.publicMetadata.role === "admin";
 
   if (!isAdmin) {
-    redirect("/dashboard");
+    router.push("/dashboard");
   }
 
   return <OnboardingDetailsGrid filterByStatus={filterByStatus} />;
