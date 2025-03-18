@@ -6,7 +6,7 @@ import {useSearchParams} from "next/navigation";
 import {OnboardingStatuses} from "@/app/constants/OnboardingStatuses";
 import {useUser} from "@clerk/nextjs";
 import {Suspense} from "react";
-import {useRouter} from "next/router";
+import {useRouter} from "next/navigation";
 
 function OnboardingDetailsContent() {
   const router = useRouter();

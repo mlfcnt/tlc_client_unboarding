@@ -19,7 +19,7 @@ import {useToast} from "@/hooks/use-toast";
 import {useUser} from "@clerk/nextjs";
 import {useQueryClient} from "@tanstack/react-query";
 import Page from "@/app/components/Page";
-import {useRouter} from "next/router";
+import {useRouter} from "next/navigation";
 
 export const NewUserForm = () => {
   const {toast} = useToast();

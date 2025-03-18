@@ -4,7 +4,7 @@ import React from "react";
 import {BarChartOnboardingSummary} from "./BarChartOnboardingSummary";
 import {Card} from "@/components/ui/card";
 import {CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import SeeMoreBtn from "../SeeAllBtn";
+import SeeMoreBtn from "./SeeAllBtn";
 
 export const OnboardingSummary = () => {
   return (
