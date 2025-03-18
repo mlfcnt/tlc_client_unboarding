@@ -6,7 +6,6 @@ import {getUsersAtStep} from "./lib";
 import {ArrowRight, CheckCircle, UserCircle, Users} from "lucide-react";
 import {Card} from "@/components/ui/card";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Button} from "@/components/ui/button";
 
 export const Steps = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -16,58 +15,8 @@ export const Steps = () => {
     setExpandedStep(expandedStep === stepId ? null : stepId);
   };
 
-  const handleCompleteAction = (stepId: number) => {
-    if (stepId === currentStep) {
-      setCurrentStep(stepId + 1);
-      setExpandedStep(stepId + 1);
-    }
-  };
-
   return (
     <div className="space-y-8">
-      {/* Current step overview */}
-      <div className="bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-8">
-        <h2 className="text-xl font-bold mb-2">Current Process Step:</h2>
-        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-          <Badge
-            className={cn(
-              "text-white border-2 border-black px-3 py-1 text-lg font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] self-start",
-              processSteps[currentStep - 1].owner === "sales"
-                ? "bg-blue-500"
-                : "bg-purple-500"
-            )}
-          >
-            Step {currentStep}
-          </Badge>
-          <div>
-            <h3 className="text-lg font-bold">
-              {processSteps[currentStep - 1].name}
-            </h3>
-            <p className="text-muted-foreground">
-              {processSteps[currentStep - 1].description}
-            </p>
-          </div>
-          <div className="md:ml-auto flex items-center gap-2">
-            <span className="font-bold">
-              {getUsersAtStep(currentStep).length} students
-            </span>
-            <span className="font-bold">•</span>
-            <span
-              className={cn(
-                "font-bold",
-                processSteps[currentStep - 1].owner === "sales"
-                  ? "text-blue-600"
-                  : "text-purple-600"
-              )}
-            >
-              {processSteps[currentStep - 1].owner === "sales"
-                ? "Sales Owned"
-                : "Admin Owned"}
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Progress visualization */}
       <div className="grid grid-cols-1 md:grid-cols-11 gap-2 mb-8">
         {processSteps.map((step) => {
@@ -129,19 +78,11 @@ export const Steps = () => {
       <div className="flex flex-wrap gap-4 mb-6">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-blue-500 rounded-full border-2 border-black"></div>
-          <span className="font-bold">Sales Owned</span>
+          <span className="font-bold">Sales</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-purple-500 rounded-full border-2 border-black"></div>
-          <span className="font-bold">Admin Owned</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-300 rounded-full border-2 border-black"></div>
-          <span className="font-bold">Completed</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-200 rounded-full border-2 border-black"></div>
-          <span className="font-bold">Upcoming</span>
+          <span className="font-bold">Admin</span>
         </div>
       </div>
 
@@ -163,8 +104,8 @@ export const Steps = () => {
                 )}
               >
                 {processSteps[expandedStep - 1].owner === "sales"
-                  ? "Sales Owned"
-                  : "Admin Owned"}
+                  ? "Sales"
+                  : "Admin"}
               </Badge>
             </div>
 
@@ -241,17 +182,6 @@ export const Steps = () => {
                 </div>
               )}
             </div>
-
-            {expandedStep === currentStep && (
-              <div className="mt-8 flex justify-end">
-                <Button
-                  onClick={() => handleCompleteAction(expandedStep)}
-                  className="bg-green-400 hover:bg-green-500 text-black font-bold px-6 py-3 text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                >
-                  Complete Step
-                </Button>
-              </div>
-            )}
           </div>
         </Card>
       )}
