@@ -14,7 +14,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <QueryClientProvider client={queryClient}>
       <ClerkProvider afterSignOutUrl="/" localization={esMX}>
         <html lang="es">
-          <body className="bg-bg">
+          <body className="bg-gray-100">
             <Header />
             <main className="pt-8">{children}</main>
             <Toaster />
