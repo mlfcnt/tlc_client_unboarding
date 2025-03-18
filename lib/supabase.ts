@@ -18,4 +18,5 @@ export type TestRequest = {
   email: string;
   status: "pending" | "completed" | "cancelled";
   sales_person_id: string;
+  phone_number: string;
 };
