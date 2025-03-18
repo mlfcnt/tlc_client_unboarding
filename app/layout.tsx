@@ -4,7 +4,7 @@ import "./globals.css";
 import {ClerkProvider} from "@clerk/nextjs";
 import Header from "./components/Header";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {Toaster} from "@/components/ui/toaster";
+import {Toaster} from "@/components/ui/sonner";
 import {esMX} from "@clerk/localizations";
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

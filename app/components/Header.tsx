@@ -18,9 +18,8 @@ export default function Header() {
           <Image
             src="/logo.png"
             alt="TLC Logo"
-            width={32}
-            height={32}
-            className="sm:w-[40px] sm:h-[40px]"
+            width={128}
+            height={128}
             priority
           />
           <span
