@@ -4,17 +4,17 @@ import React from "react";
 import {redirect} from "next/navigation";
 import {Button} from "@/components/ui/button";
 
-export const NewTestingRequest = () => {
+export const CreateNewUserButton = () => {
   return (
     <Button
       className="text-xl cursor-pointer"
       onClick={() => {
-        redirect("/dashboard/testing-request");
+        redirect("/dashboard/users/new");
       }}
     >
-      <span>Submit a new test request</span>
+      <span>Create a new user</span>
     </Button>
   );
 };
 
-export default NewTestingRequest;
+export default CreateNewUserButton;

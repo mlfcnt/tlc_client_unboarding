@@ -15,14 +15,12 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {supabase} from "@/lib/supabase";
-import {InputOTPSlot} from "@/components/ui/input-otp";
-import {InputOTP, InputOTPGroup} from "@/components/ui/input-otp";
-import {REGEXP_ONLY_DIGITS} from "input-otp";
 import {useToast} from "@/hooks/use-toast";
 import {redirect} from "next/navigation";
 import {useUser} from "@clerk/nextjs";
 import {useQueryClient} from "@tanstack/react-query";
-export const TestingRequest = () => {
+
+export const NewUserForm = () => {
   const {toast} = useToast();
   const {user} = useUser();
   const queryClient = useQueryClient();
@@ -57,7 +55,6 @@ export const TestingRequest = () => {
       last_name: values.lastName,
       email: values.email,
       id_number: +values.idNumber,
-      status: "test_requested",
       sales_email: user?.emailAddresses[0].emailAddress,
     });
 
@@ -131,30 +128,13 @@ export const TestingRequest = () => {
           render={({field}) => (
             <FormItem>
               <FormLabel>ID number</FormLabel>
-              <FormControl className="flex gap-2">
-                <InputOTP
-                  maxLength={10}
+              <FormControl>
+                <Input
                   {...field}
-                  value={field.value?.toString()}
-                  pattern={REGEXP_ONLY_DIGITS}
-                >
-                  <div className="flex flex-wrap gap-5">
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                    </InputOTPGroup>
-                    <InputOTPGroup>
-                      <InputOTPSlot index={5} />
-                      <InputOTPSlot index={6} />
-                      <InputOTPSlot index={7} />
-                      <InputOTPSlot index={8} />
-                      <InputOTPSlot index={9} />
-                    </InputOTPGroup>
-                  </div>
-                </InputOTP>
+                  type="number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

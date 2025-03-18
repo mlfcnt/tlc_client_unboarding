@@ -1,10 +1,14 @@
 "use client";
 
+import {useToast} from "@/hooks/use-toast";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import React, {useState} from "react";
+import {OnboardingRequest} from "../onboarding-details/components/OnboardingDetailsGrid";
+import {supabase} from "@/lib/supabase";
 import {
   getKeyFromValue,
   OnboardingStatuses,
 } from "@/app/constants/OnboardingStatuses";
-import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {
   Select,
@@ -13,29 +17,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {useToast} from "@/hooks/use-toast";
-import {supabase} from "@/lib/supabase";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import React, {useState} from "react";
-import {OnboardingRequest} from "../onboarding-details/components/OnboardingDetailsGrid";
+import {Button} from "@/components/ui/button";
 
-export const NotifyTestingDone = () => {
+export const RequestTesting = () => {
   const {toast} = useToast();
   const queryClient = useQueryClient();
   const [selectedRequestId, setSelectedRequestId] = useState<
     OnboardingRequest["id"] | null
   >(null);
 
-  const {data: pendingTesting, isLoading} = useQuery({
-    queryKey: [
-      "onboardingRequests",
-      getKeyFromValue(OnboardingStatuses.test_sent),
-    ],
+  const {data: notStartedUsers, isLoading} = useQuery({
+    queryKey: ["onboardingRequests", "not_started"],
     queryFn: async () => {
       const res = await supabase
         .from("onboarding_requests")
-        .select("*")
-        .eq("status", getKeyFromValue(OnboardingStatuses.test_sent));
+        .select("id, first_name, last_name, status")
+        .eq("status", getKeyFromValue(OnboardingStatuses.not_started));
       if (res.error) {
         toast({
           title: "Error fetching pending testing",
@@ -51,7 +48,7 @@ export const NotifyTestingDone = () => {
       const {data, error} = await supabase
         .from("onboarding_requests")
         .update({
-          status: getKeyFromValue(OnboardingStatuses.test_done),
+          status: getKeyFromValue(OnboardingStatuses.test_requested),
         })
         .eq("id", onboardingRequestId);
       if (error) throw error;
@@ -59,8 +56,8 @@ export const NotifyTestingDone = () => {
     },
     onSuccess: () => {
       toast({
-        title: "Testing done",
-        description: "Thank you for notifying testing done",
+        title: "Test sent",
+        description: "The test has been requested",
         className: "bg-green-500",
       });
       queryClient.invalidateQueries({
@@ -79,19 +76,19 @@ export const NotifyTestingDone = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Confirm testing completed</CardTitle>
+        <CardTitle>Request testing</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <div>Loading...</div>
-        ) : pendingTesting?.length ? (
+        ) : notStartedUsers?.length ? (
           <div className="flex justify-center p-2">
             <Select onValueChange={setSelectedRequestId}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a student" />
               </SelectTrigger>
               <SelectContent>
-                {pendingTesting?.map((request) => (
+                {notStartedUsers?.map((request) => (
                   <SelectItem key={request.id} value={request.id}>
                     {request.first_name} {request.last_name}
                   </SelectItem>
@@ -108,8 +105,8 @@ export const NotifyTestingDone = () => {
                     await notifyTestingDone(selectedRequestId);
                     setSelectedRequestId(null);
                     toast({
-                      title: "Testing done",
-                      description: "Thank you for notifying testing done",
+                      title: "Test requested",
+                      description: "The test has been requested",
                       className: "bg-green-500",
                     });
                   } catch (error: unknown) {
@@ -128,7 +125,7 @@ export const NotifyTestingDone = () => {
             </Button>
           </div>
         ) : (
-          <p>No pending testing requests</p>
+          <p>No users to request testing</p>
         )}
       </CardContent>
     </Card>

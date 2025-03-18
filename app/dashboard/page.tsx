@@ -3,9 +3,10 @@ import {redirect} from "next/navigation";
 import {ROLES} from "../constants/Roles";
 import Page from "../components/Page";
 import {UsersListSummary} from "./components/UsersListSummary";
-import NewTestingRequest from "./components/NewTestingRequest";
+import CreateNewUserButton from "./components/CreateNewUserButton";
 import {OnboardingSummary} from "./components/OnboardingSummary";
 import {NotifyTestingDone} from "./components/NotifyTestingDone";
+import {RequestTesting} from "./components/RequestTesting";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -22,7 +23,8 @@ export default async function DashboardPage() {
           {isAdmin ? <OnboardingSummary /> : null}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             {isAdmin ? <UsersListSummary /> : null}
-            <NewTestingRequest />
+            <CreateNewUserButton />
+            <RequestTesting />
             <NotifyTestingDone />
           </div>
         </div>
