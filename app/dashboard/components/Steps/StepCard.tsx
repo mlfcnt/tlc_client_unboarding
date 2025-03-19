@@ -1,7 +1,7 @@
 import {cn} from "@/lib/utils";
 import React from "react";
 import {ProcessStep} from "./processSteps";
-import {CircleCheck, UserCircle, Users} from "lucide-react";
+import {CircleCheck, DollarSign, UserCircle, Users} from "lucide-react";
 
 export const StepCard = ({
   step,
@@ -26,9 +26,14 @@ export const StepCard = ({
           isSelected ? "bg-white" : "bg-gray-200"
         )}
       >
-        <span className="text-xl font-bold">
-          {amountOfUsersAtThisStep} user{amountOfUsersAtThisStep > 1 ? "s" : ""}
-        </span>
+        {step.id === 1 ? (
+          <DollarSign />
+        ) : (
+          <span className="text-xl font-bold">
+            {amountOfUsersAtThisStep} user
+            {amountOfUsersAtThisStep > 1 ? "s" : ""}
+          </span>
+        )}
 
         <div
           className={cn(
