@@ -6,7 +6,7 @@ import {useUser} from "@clerk/nextjs";
 import {Title} from "./components/Title";
 import {Page} from "./components/Page";
 import {Subtitle} from "./components/Subtitle";
-import {Steps} from "./components/Steps/StepsContainer";
+import {Steps} from "./components/Steps/Steps";
 
 export default function DashboardPage() {
   const {user} = useUser();
