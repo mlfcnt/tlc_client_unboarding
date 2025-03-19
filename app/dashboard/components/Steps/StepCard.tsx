@@ -14,30 +14,33 @@ export const StepCard = ({
   amountOfUsersAtThisStep: number;
   isSelected?: boolean;
 }) => {
+  // Function to determine the color based on user count
+  const getUserCountColor = () => {
+    if (amountOfUsersAtThisStep === 0) return "text-gray-400";
+    if (amountOfUsersAtThisStep <= 2) return "text-green-600 font-semibold";
+    if (amountOfUsersAtThisStep <= 4) return "text-orange-500 font-semibold";
+    return "text-red-600 font-bold";
+  };
+
   return (
     <div
       key={step.id}
-      className={cn("relative cursor-pointer transition-all")}
+      className="relative cursor-pointer transition-all w-[150px]"
       onClick={() => handleStepClick(step.id)}
     >
       <div
         className={cn(
-          "h-16 flex flex-col items-center justify-center rounded-lg border-4 border-black font-bold relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
+          "h-20 w-full flex flex-col items-center justify-center rounded-lg border-4 border-black font-bold relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-2",
           isSelected ? "bg-white" : "bg-gray-200"
         )}
       >
-        {step.id === 1 ? (
-          <DollarSign />
-        ) : (
-          <span className="text-xl font-bold">
-            {amountOfUsersAtThisStep} user
-            {amountOfUsersAtThisStep > 1 ? "s" : ""}
-          </span>
-        )}
+        <div className="text-sm font-bold text-center leading-tight max-h-14 overflow-hidden">
+          {step.name}
+        </div>
 
         <div
           className={cn(
-            "absolute -top-2 -left-2 w-6 h-6 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center"
+            "absolute -top-2 -left-2 w-7 h-7 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center"
           )}
         >
           <span className="text-xs text-white font-bold">{step.id}</span>
@@ -45,7 +48,7 @@ export const StepCard = ({
 
         <div
           className={cn(
-            "absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-2 border-black",
+            "absolute -bottom-2 -right-2 w-7 h-7 rounded-full border-2 border-black",
             step.owner === "sales" ? "bg-blue-500" : "bg-purple-500"
           )}
         >
@@ -59,8 +62,13 @@ export const StepCard = ({
         </div>
       </div>
 
-      <div className="mt-2 text-md font-medium text-center min-h-[2rem] break-words px-1">
-        {step.name}
+      {/* User count below the card */}
+      <div className={cn("mt-2 text-center font-medium", getUserCountColor())}>
+        {amountOfUsersAtThisStep > 0
+          ? `${amountOfUsersAtThisStep} user${
+              amountOfUsersAtThisStep > 1 ? "s" : ""
+            }`
+          : "No users"}
       </div>
     </div>
   );

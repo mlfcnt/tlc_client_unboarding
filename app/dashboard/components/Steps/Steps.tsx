@@ -3,6 +3,7 @@ import {processSteps} from "./processSteps";
 import {getUsersAtStep} from "./lib";
 import {CurrentStep} from "./CurrentStep";
 import {StepCard} from "./StepCard";
+import {ArrowRight} from "lucide-react";
 
 export const Steps = () => {
   const [expandedStep, setExpandedStep] = useState<number | null>(1);
@@ -11,22 +12,74 @@ export const Steps = () => {
     setExpandedStep(stepId);
   };
 
+  // Split the steps into two rows
+  const firstRowSteps = processSteps.slice(0, 6);
+  const secondRowSteps = processSteps.slice(6);
+
+  // Create a reusable arrow component
+  const ArrowElement = () => (
+    <td
+      className="w-10 align-middle relative"
+      style={{verticalAlign: "middle"}}
+    >
+      <div className="absolute left-1/2 top-[38px] -translate-x-1/2 -translate-y-1/2">
+        <ArrowRight strokeWidth={3} className="w-8 h-8 text-black" />
+      </div>
+    </td>
+  );
+
   return (
-    <div className="space-y-8">
-      {/* Progress visualization */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mb-8">
-        {processSteps.map((step) => {
-          const usersAtThisStep = getUsersAtStep(step.id);
-          return (
-            <StepCard
-              key={step.id}
-              step={step}
-              handleStepClick={handleStepClick}
-              amountOfUsersAtThisStep={usersAtThisStep.length}
-              isSelected={expandedStep === step.id}
-            />
-          );
-        })}
+    <div className="space-y-4">
+      {/* First row */}
+      <div className="flex justify-center mb-2">
+        <table className="border-separate border-spacing-x-2">
+          <tbody>
+            <tr>
+              {firstRowSteps.map((step, index) => {
+                const usersAtThisStep = getUsersAtStep(step.id);
+                return (
+                  <React.Fragment key={step.id}>
+                    <td className="px-0 pb-2">
+                      <StepCard
+                        step={step}
+                        handleStepClick={handleStepClick}
+                        amountOfUsersAtThisStep={usersAtThisStep.length}
+                        isSelected={expandedStep === step.id}
+                      />
+                    </td>
+                    {index < firstRowSteps.length - 1 && <ArrowElement />}
+                  </React.Fragment>
+                );
+              })}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Second row */}
+      <div className="flex justify-center mb-6">
+        <table className="border-separate border-spacing-x-2">
+          <tbody>
+            <tr>
+              {secondRowSteps.map((step, index) => {
+                const usersAtThisStep = getUsersAtStep(step.id);
+                return (
+                  <React.Fragment key={step.id}>
+                    <td className="px-0 pb-2">
+                      <StepCard
+                        step={step}
+                        handleStepClick={handleStepClick}
+                        amountOfUsersAtThisStep={usersAtThisStep.length}
+                        isSelected={expandedStep === step.id}
+                      />
+                    </td>
+                    {index < secondRowSteps.length - 1 && <ArrowElement />}
+                  </React.Fragment>
+                );
+              })}
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       {/* Legend */}
