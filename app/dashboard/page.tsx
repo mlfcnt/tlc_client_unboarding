@@ -14,8 +14,6 @@ export default function DashboardPage() {
   if (!user || !userRole || ![ROLES.admin, ROLES.sales].includes(userRole)) {
     redirect("/sign-in");
   }
-  // const isAdmin = userRole === ROLES.admin;
-  // const isSales = userRole === ROLES.sales;
 
   return (
     <Page>

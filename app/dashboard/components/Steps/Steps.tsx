@@ -1,11 +1,13 @@
 import React, {useState} from "react";
 import {processSteps} from "./processSteps";
-import {getUsersAtStep} from "./lib";
 import {CurrentStep} from "./CurrentStep";
 import {StepCard} from "./StepCard";
 import {ArrowRight} from "lucide-react";
+import {StepLegend} from "./StepLegend";
+import {useUsersAtStep} from "../../api/useUsersPerStep";
 
 export const Steps = () => {
+  const {getUsersAtStep} = useUsersAtStep();
   const [expandedStep, setExpandedStep] = useState<number | null>(1);
 
   const handleStepClick = (stepId: number) => {
@@ -83,28 +85,7 @@ export const Steps = () => {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-6 mb-6 justify-center">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-gray-800 rounded-full border-2 border-black flex items-center justify-center">
-            <span className="text-xs text-white font-bold">1</span>
-          </div>
-          <span className="font-medium">Step Number</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-green-600 rounded-full border-2 border-black flex items-center justify-center">
-            <span className="text-xs text-white font-bold">2</span>
-          </div>
-          <span className="font-medium">User Count</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-blue-100 rounded-lg border-2 border-black"></div>
-          <span className="font-medium">Sales</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-purple-100 rounded-lg border-2 border-black"></div>
-          <span className="font-medium">Admin</span>
-        </div>
-      </div>
+      <StepLegend />
 
       {/* Current step details */}
       <CurrentStep expandedStep={expandedStep} />
