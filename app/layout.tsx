@@ -6,7 +6,6 @@ import Header from "./components/Header";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Toaster} from "@/components/ui/sonner";
 import {esMX} from "@clerk/localizations";
-import {Head} from "next/document";
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   const queryClient = new QueryClient();
