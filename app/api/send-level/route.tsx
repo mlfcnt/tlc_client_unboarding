@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
     from: "TLC <mail@tlc-onboarding.com>",
     to: adminEmail,
     subject: `Evaluación completada para ${userFirstname} ${userLastname} - Nivel ${level}`,
-    react: EmailTemplate({
+    react: await EmailTemplate({
       userInfo: {
         firstname: userFirstname,
         lastname: userLastname,
