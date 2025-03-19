@@ -22,7 +22,7 @@ export const Steps = () => {
       className="w-10 align-middle relative"
       style={{verticalAlign: "middle"}}
     >
-      <div className="absolute left-1/2 top-[38px] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute left-1/2 top-[45px] -translate-x-1/2 -translate-y-1/2">
         <ArrowRight strokeWidth={3} className="w-8 h-8 text-black" />
       </div>
     </td>
