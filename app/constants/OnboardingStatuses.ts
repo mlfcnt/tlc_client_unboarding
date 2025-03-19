@@ -1,5 +1,6 @@
 export const OnboardingStatuses = {
-  lead_created: "Lead created",
+  before_lead_created: "Lead creation",
+  lead_created: "Leads awaiting test",
   test_sent: "Test sent",
   test_completed: "Test completed",
   class_proposed: "Class proposed",
@@ -42,58 +43,63 @@ type StepByStatus = Record<
 >;
 
 export const stepByStatus: StepByStatus = {
-  lead_created: {
+  before_lead_created: {
     stepId: 1,
+    owner: "sales",
+    description: "Create a new lead",
+  },
+  lead_created: {
+    stepId: 2,
     owner: "admin",
     description: "Clients that don't yet have the test",
   },
   test_sent: {
-    stepId: 2,
+    stepId: 3,
     owner: "admin",
     description: "Clients that are currently taking the test",
   },
   test_completed: {
-    stepId: 3,
+    stepId: 4,
     owner: "sales",
     description: "Clients waiting for a class proposal",
   },
   class_proposed: {
-    stepId: 4,
+    stepId: 5,
     owner: "admin",
     description: "Clients that have been proposed a class",
   },
   class_confirmed: {
-    stepId: 5,
+    stepId: 6,
     owner: "sales",
     description: "Clients that are waiting for a contract",
   },
   class_refused: {
-    stepId: 6,
+    stepId: 7,
     owner: "sales",
     description: "Clients that refused the latest class proposal",
   },
   contract_requested: {
-    stepId: 7,
+    stepId: 8,
     owner: "sales",
     description: "Clients that have requested a contract",
   },
   contract_sent: {
-    stepId: 8,
+    stepId: 9,
     owner: "admin",
     description: "Clients that have received the contract",
   },
   contract_signed: {
-    stepId: 9,
+    stepId: 10,
     owner: "sales",
     description: "Clients that have signed the contract",
   },
   activated: {
-    stepId: 10,
+    stepId: 11,
     owner: "admin",
     description: "Clients that have been activated",
   },
   introduction_confirmed: {
-    stepId: 11,
+    stepId: 12,
     owner: "sales",
     description: "Clients that have confirmed the introduction",
   },

@@ -8,13 +8,13 @@ export const Steps = () => {
   const [expandedStep, setExpandedStep] = useState<number | null>(1);
 
   const handleStepClick = (stepId: number) => {
-    setExpandedStep(expandedStep === stepId ? null : stepId);
+    setExpandedStep(stepId);
   };
 
   return (
     <div className="space-y-8">
       {/* Progress visualization */}
-      <div className="grid grid-cols-1 md:grid-cols-11 gap-2 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mb-8">
         {processSteps.map((step) => {
           const usersAtThisStep = getUsersAtStep(step.id);
           return (
@@ -23,6 +23,7 @@ export const Steps = () => {
               step={step}
               handleStepClick={handleStepClick}
               amountOfUsersAtThisStep={usersAtThisStep.length}
+              isSelected={expandedStep === step.id}
             />
           );
         })}

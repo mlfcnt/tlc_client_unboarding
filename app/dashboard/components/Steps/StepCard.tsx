@@ -7,10 +7,12 @@ export const StepCard = ({
   step,
   handleStepClick,
   amountOfUsersAtThisStep,
+  isSelected = false,
 }: {
   step: ProcessStep;
   handleStepClick: (stepId: number) => void;
   amountOfUsersAtThisStep: number;
+  isSelected?: boolean;
 }) => {
   return (
     <div
@@ -21,14 +23,24 @@ export const StepCard = ({
       <div
         className={cn(
           "h-16 flex flex-col items-center justify-center rounded-lg border-4 border-black font-bold relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
-          "bg-gray-200"
+          isSelected ? "bg-white" : "bg-gray-200"
         )}
       >
-        <span className="text-xl font-bold">{amountOfUsersAtThisStep}</span>
+        <span className="text-xl font-bold">
+          {amountOfUsersAtThisStep} user{amountOfUsersAtThisStep > 1 ? "s" : ""}
+        </span>
 
         <div
           className={cn(
-            "absolute -top-2 -left-2 w-6 h-6 rounded-full border-2 border-black",
+            "absolute -top-2 -left-2 w-6 h-6 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center"
+          )}
+        >
+          <span className="text-xs text-white font-bold">{step.id}</span>
+        </div>
+
+        <div
+          className={cn(
+            "absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-2 border-black",
             step.owner === "sales" ? "bg-blue-500" : "bg-purple-500"
           )}
         >
@@ -42,7 +54,7 @@ export const StepCard = ({
         </div>
       </div>
 
-      <div className="mt-2 text-md font-medium text-center line-clamp-2 h-8">
+      <div className="mt-2 text-md font-medium text-center min-h-[2rem] break-words px-1">
         {step.name}
       </div>
     </div>

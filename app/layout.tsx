@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Toaster} from "@/components/ui/sonner";
 import {esMX} from "@clerk/localizations";
+import {Head} from "next/document";
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   const queryClient = new QueryClient();
@@ -14,6 +15,12 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <QueryClientProvider client={queryClient}>
       <ClerkProvider afterSignOutUrl="/" localization={esMX}>
         <html lang="es">
+          <head>
+            <title>TLC Onboarding - Dashboard</title>
+            <meta name="description" content="TLC Onboarding - Dashboard" />
+            <link rel="icon" href="/favicon.ico" />
+          </head>
+          <head />
           <body className="bg-gray-100">
             <Header />
             <main className="pt-8">{children}</main>

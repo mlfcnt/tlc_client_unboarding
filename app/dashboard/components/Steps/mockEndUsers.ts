@@ -2,27 +2,27 @@ export const mockEndUsers = [
   {
     id: 1,
     name: "Alex Johnson",
-    currentStep: 1,
+    currentStep: 2,
   },
   {
     id: 2,
     name: "Jamie Smith",
-    currentStep: 2,
+    currentStep: 3,
   },
   {
     id: 3,
     name: "Taylor Brown",
-    currentStep: 3,
+    currentStep: 4,
   },
   {
     id: 4,
     name: "Morgan Wilson",
-    currentStep: 3,
+    currentStep: 5,
   },
   {
     id: 5,
     name: "Casey Davis",
-    currentStep: 3,
+    currentStep: 6,
   },
   {
     id: 6,
