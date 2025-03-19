@@ -83,14 +83,26 @@ export const Steps = () => {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap gap-6 mb-6 justify-center">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-full border-2 border-black"></div>
-          <span className="font-bold">Sales</span>
+          <div className="w-5 h-5 bg-gray-800 rounded-full border-2 border-black flex items-center justify-center">
+            <span className="text-xs text-white font-bold">1</span>
+          </div>
+          <span className="font-medium">Step Number</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-purple-500 rounded-full border-2 border-black"></div>
-          <span className="font-bold">Admin</span>
+          <div className="w-5 h-5 bg-green-600 rounded-full border-2 border-black flex items-center justify-center">
+            <span className="text-xs text-white font-bold">2</span>
+          </div>
+          <span className="font-medium">User Count</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-blue-100 rounded-lg border-2 border-black"></div>
+          <span className="font-medium">Sales</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-purple-100 rounded-lg border-2 border-black"></div>
+          <span className="font-medium">Admin</span>
         </div>
       </div>
 
