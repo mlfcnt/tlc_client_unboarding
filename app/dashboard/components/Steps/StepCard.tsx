@@ -1,7 +1,7 @@
 import {cn} from "@/lib/utils";
 import React from "react";
 import {ProcessStep} from "./processSteps";
-import {CircleCheck, DollarSign, UserCircle, Users} from "lucide-react";
+import {CircleCheck, UserCircle, Users} from "lucide-react";
 
 export const StepCard = ({
   step,
