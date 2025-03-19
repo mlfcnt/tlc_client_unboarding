@@ -20,36 +20,36 @@ export const CurrentStep = ({expandedStep}: {expandedStep: number | null}) => {
         <p className="text-lg mb-6 bg-yellow-100 p-3 border-2 border-black">
           {processSteps[expandedStep - 1].description}
         </p>
-
-        {/* End users at this step */}
-        <div className="mb-6">
-          <h3 className="text-xl font-bold mb-3">Students at this step:</h3>
-          <div className="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            {getUsersAtStep(expandedStep).length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {getUsersAtStep(expandedStep).map((user) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center gap-3 p-2 rounded border-2 border-black bg-orange-100"
-                  >
-                    <Avatar className="h-10 w-10 border-2 border-black">
-                      <AvatarFallback className="bg-orange-300">
-                        {user.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-bold">{user.name}</div>
+        {expandedStep === 1 ? null : (
+          <div className="mb-6">
+            <h3 className="text-xl font-bold mb-3">Students at this step:</h3>
+            <div className="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              {getUsersAtStep(expandedStep).length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {getUsersAtStep(expandedStep).map((user) => (
+                    <div
+                      key={user.id}
+                      className="flex items-center gap-3 p-2 rounded border-2 border-black bg-orange-100"
+                    >
+                      <Avatar className="h-10 w-10 border-2 border-black">
+                        <AvatarFallback className="bg-orange-300">
+                          {user.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-bold">{user.name}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-center py-2 italic">
-                No students currently at this step
-              </p>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center py-2 italic">
+                  No students currently at this step
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-6">
           {processSteps[expandedStep - 1].salesActions.length > 0 && (
