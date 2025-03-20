@@ -29,6 +29,7 @@ import {errorToast} from "@/components/Toasts/errorToast";
 import {useQueryClient} from "@tanstack/react-query";
 import {REACT_QUERY_KEYS} from "@/app/constants/reactQueryKeys";
 import {DATABASE_TABLES} from "@/app/constants/databaseTables";
+import {Textarea} from "@/components/ui/textarea";
 
 export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
   const user = useUser();
@@ -41,6 +42,7 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
     idNumber: z.string().min(4).max(13),
     skipTest: z.boolean().default(false),
     level: z.enum(["A1", "A2", "A2+", "B1", "B1+", "B2", "B2+", "C1"]),
+    leadRemarks: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,6 +55,7 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
       idNumber: "",
       skipTest: false,
       level: "A1",
+      leadRemarks: "",
     },
   });
 
@@ -65,6 +68,7 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
       skipTest,
       level,
       email,
+      leadRemarks,
     } = data;
     const {error} = await supabase
       .from(DATABASE_TABLES.ONBOARDING_REQUESTS)
@@ -79,6 +83,7 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
         status: skipTest
           ? getKeyFromValue(OnboardingStatuses.test_completed)
           : getKeyFromValue(OnboardingStatuses.lead_created),
+        lead_remarks: leadRemarks,
       });
 
     if (error) {
@@ -160,6 +165,19 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
                   pattern="\d*"
                   inputMode="numeric"
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="leadRemarks"
+          render={({field}) => (
+            <FormItem>
+              <FormLabel>Remarks</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
