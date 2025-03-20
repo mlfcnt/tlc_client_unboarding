@@ -5,7 +5,7 @@ import {OnboardingRequest} from "@/app/types/OnboardingRequest";
 import {supabase} from "@/lib/supabase";
 import {useQueryClient} from "@tanstack/react-query";
 
-export const useUpdateStatus = () => {
+export const useUpdateStatusAndInvalidateCache = () => {
   const queryClient = useQueryClient();
   const updateStatus = async ({
     newStatus,

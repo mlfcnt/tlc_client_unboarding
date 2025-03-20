@@ -11,6 +11,7 @@ import {Button} from "@/components/ui/button";
 import {Mail, MoreHorizontal, ScanEye} from "lucide-react";
 import {UserDetailsCard} from "./UserDetailsCard";
 import {SendTestForm} from "./StepsActions/Step2/SendTestForm";
+import {NotifyAlert} from "./StepsActions/Step3/NotifyAlert";
 
 export const UserActionCard = ({
   userId,
@@ -23,6 +24,7 @@ export const UserActionCard = ({
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [showSendTest, setShowSendTest] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showNotifyAlert, setShowNotifyAlert] = useState(false);
 
   return (
     <>
@@ -39,6 +41,14 @@ export const UserActionCard = ({
           user={user}
           show={showSendTest}
           setShow={setShowSendTest}
+        />
+      )}
+
+      {currentStep === 3 && (
+        <NotifyAlert
+          userId={userId}
+          show={showNotifyAlert}
+          setShow={setShowNotifyAlert}
         />
       )}
 
@@ -82,6 +92,18 @@ export const UserActionCard = ({
                   }}
                 >
                   <Mail className="mr-2 h-4 w-4" /> Send the test via email
+                </div>
+              )}
+              {currentStep === 3 && (
+                <div
+                  className="p-2 cursor-pointer hover:bg-slate-100 rounded flex items-center"
+                  onClick={() => {
+                    setShowNotifyAlert(true);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <Mail className="mr-2 h-4 w-4" />
+                  The user has completed the test
                 </div>
               )}
             </DropdownMenuContent>

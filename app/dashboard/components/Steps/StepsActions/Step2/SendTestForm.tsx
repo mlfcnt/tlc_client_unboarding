@@ -2,7 +2,7 @@ import {
   getKeyFromValue,
   OnboardingStatuses,
 } from "@/app/constants/OnboardingStatuses";
-import {useUpdateStatus} from "@/app/dashboard/api/updateStatus";
+import {useUpdateStatusAndInvalidateCache} from "@/app/dashboard/api/updateStatus";
 import {OnboardingRequest} from "@/app/types/OnboardingRequest";
 import {Button} from "@/components/ui/button";
 import {DialogTitle} from "@/components/ui/dialog";
@@ -32,7 +32,7 @@ export const SendTestForm = ({
   show: boolean;
   setShow: (show: boolean) => void;
 }) => {
-  const {updateStatus} = useUpdateStatus();
+  const {updateStatus} = useUpdateStatusAndInvalidateCache();
   const formSchema = z.object({
     email: z.string().email(),
     testLink: z.string().url(),
