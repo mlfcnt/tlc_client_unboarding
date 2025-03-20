@@ -1,9 +1,9 @@
 import {Card} from "@/components/ui/card";
 import React from "react";
 import {processSteps} from "./processSteps";
-import {Avatar, AvatarFallback} from "@/components/ui/avatar";
-import {Step1} from "./StepsActions/Step1/Step1";
 import {useUsersAtStep} from "../../api/useUsersPerStep";
+import {UserActionCard} from "./UserActionCard";
+import {Step1} from "./StepsActions/Step1/Step1";
 
 export const CurrentStep = ({expandedStep}: {expandedStep: number | null}) => {
   const {getUsersAtStep} = useUsersAtStep();
@@ -26,27 +26,23 @@ export const CurrentStep = ({expandedStep}: {expandedStep: number | null}) => {
           </p>
         )}
 
-        {expandedStep === 1 ? null : (
+        {expandedStep === 1 ? (
+          <Step1 />
+        ) : (
           <div className="mb-6">
             <h3 className="text-xl font-bold mb-3">Students at this step:</h3>
             <div className="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               {usersAtStep.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {usersAtStep.map((user) => (
-                    <div
-                      key={user.id}
-                      className="flex items-center gap-3 p-2 rounded border-2 border-black bg-orange-100"
-                    >
-                      <Avatar className="h-10 w-10 border-2 border-black">
-                        <AvatarFallback className="bg-orange-300">
-                          {user.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="font-bold">{user.name}</div>
-                      </div>
-                    </div>
-                  ))}
+                  {usersAtStep.map((user) => {
+                    return (
+                      <UserActionCard
+                        key={user.id}
+                        userId={user.id}
+                        currentStep={expandedStep}
+                      />
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-center py-2 italic">
@@ -56,13 +52,7 @@ export const CurrentStep = ({expandedStep}: {expandedStep: number | null}) => {
             </div>
           </div>
         )}
-        {displayStep(expandedStep)}
       </div>
     </Card>
   );
-};
-
-const displayStep = (step: number) => {
-  if (step === 1) return <Step1 />;
-  return <p>Actions for step {step} not implemented yet</p>;
 };

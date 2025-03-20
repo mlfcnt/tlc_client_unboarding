@@ -16,11 +16,11 @@ export const OnboardingStatuses = {
 // Utility function to get the key from a value
 export const getKeyFromValue = (
   value: string
-): keyof typeof OnboardingStatuses | undefined => {
+): keyof typeof OnboardingStatuses => {
   const entries = Object.entries(OnboardingStatuses);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const entry = entries.find(([_, val]) => val === value);
-  return entry ? (entry[0] as keyof typeof OnboardingStatuses) : undefined;
+  return entry?.[0] as keyof typeof OnboardingStatuses;
 };
 
 // Utility function to get all keys

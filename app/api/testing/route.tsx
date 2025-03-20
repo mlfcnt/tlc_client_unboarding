@@ -5,7 +5,7 @@ import {Resend} from "resend";
 
 export async function POST(request: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const {email} = await request.json();
+  const {email, testLink} = await request.json();
 
   const {data, error} = await resend.emails.send({
     from: "TLC <mail@tlc-onboarding.com>",
@@ -24,23 +24,45 @@ export async function POST(request: NextRequest) {
           Nos complace informarle que su prueba de evaluación ya está
           disponible.
         </p>
-        <p>Puede acceder a la prueba a través del siguiente enlace:</p>
-        <p style={{textAlign: "center"}}>
-          <a
-            href="https://evaluacion.tlc-onboarding.com/test/12345"
+        <div
+          style={{
+            backgroundColor: "#f7fafc",
+            padding: "20px",
+            borderRadius: "8px",
+            border: "2px solid #3182ce",
+            margin: "20px 0",
+          }}
+        >
+          <p
             style={{
-              backgroundColor: "#3182ce",
-              color: "white",
-              padding: "10px 20px",
-              textDecoration: "none",
-              borderRadius: "4px",
-              display: "inline-block",
-              margin: "10px 0",
+              fontSize: "1.1em",
+              fontWeight: "bold",
+              marginBottom: "15px",
+              color: "#2c5282",
             }}
           >
-            Acceder a mi prueba
-          </a>
-        </p>
+            👉 Haga clic en el botón a continuación para comenzar su prueba:
+          </p>
+          <p style={{textAlign: "center"}}>
+            <a
+              href={testLink}
+              style={{
+                backgroundColor: "#3182ce",
+                color: "white",
+                padding: "15px 30px",
+                textDecoration: "none",
+                borderRadius: "6px",
+                display: "inline-block",
+                margin: "10px 0",
+                fontSize: "1.2em",
+                fontWeight: "bold",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              Comenzar mi prueba ahora
+            </a>
+          </p>
+        </div>
         <p>
           Le deseamos mucho éxito en su evaluación. Si tiene alguna pregunta o
           inconveniente, no dude en contactarnos.
