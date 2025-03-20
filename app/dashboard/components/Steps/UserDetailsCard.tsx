@@ -61,6 +61,14 @@ export const UserDetailsCard = ({
             <h3 className="font-black text-lg mb-3">Contact Information</h3>
             <div className="grid grid-cols-2 gap-x-12 gap-y-3">
               <div>
+                <div className="font-bold">First Name:</div>
+                <div className="break-all">{user.first_name}</div>
+              </div>
+              <div>
+                <div className="font-bold">Last Name:</div>
+                <div className="break-all">{user.last_name}</div>
+              </div>
+              <div>
                 <div className="font-bold">Email:</div>
                 <div className="break-all">{user.email}</div>
               </div>
