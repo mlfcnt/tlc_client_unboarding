@@ -43,6 +43,7 @@ import {
 } from "@/app/constants/OnboardingStatuses";
 import {useOnboardRequests} from "@/app/dashboard/api/useOnboardRequests";
 import {Label} from "@/components/ui/label";
+import {TimePicker} from "@/components/ui/time-picker";
 setDefaultOptions({locale: enGB});
 
 export const ProposeGroupForm = ({
@@ -94,7 +95,7 @@ export const ProposeGroupForm = ({
           userEmail: email,
           userFirstname: user.first_name,
           userLastname: user.last_name,
-          startDate: format(startDate, "PPPP"),
+          startDate,
           level,
           additionalContent,
           userId: user.id,
@@ -171,39 +172,41 @@ export const ProposeGroupForm = ({
               name="startDate"
               render={({field}) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Start date</FormLabel>
+                  <FormLabel className="text-left">DateTime</FormLabel>
                   <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
+                    <FormControl>
+                      <PopoverTrigger asChild>
                         <Button
-                          variant={"outline"}
+                          variant="outline"
                           className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
+                            "w-[280px] justify-start text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
                           {field.value ? (
-                            format(field.value, "PPPP")
+                            format(field.value, "PPP HH:mm:ss")
                           ) : (
                             <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                      </PopoverTrigger>
+                    </FormControl>
+                    <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date() || date < new Date("1900-01-01")
-                        }
                         initialFocus
                       />
+                      <div className="p-3 border-t border-border">
+                        <TimePicker
+                          setDate={field.onChange}
+                          date={field.value}
+                        />
+                      </div>
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
                 </FormItem>
               )}
             />

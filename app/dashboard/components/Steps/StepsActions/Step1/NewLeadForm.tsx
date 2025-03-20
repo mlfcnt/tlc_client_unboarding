@@ -41,7 +41,9 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
     phoneNumber: z.string().min(10).max(15),
     idNumber: z.string().min(4).max(13),
     skipTest: z.boolean().default(false),
-    level: z.enum(["A1", "A2", "A2+", "B1", "B1+", "B2", "B2+", "C1"]),
+    level: z
+      .enum(["A1", "A2", "A2+", "B1", "B1+", "B2", "B2+", "C1"])
+      .optional(),
     leadRemarks: z.string().optional(),
   });
 
@@ -59,7 +61,10 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
     },
   });
 
+  console.log(form.formState.errors);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log({data});
     const {
       firstName,
       lastName,
