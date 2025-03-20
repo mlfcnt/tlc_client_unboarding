@@ -104,3 +104,9 @@ export const stepByStatus: StepByStatus = {
     description: "Clients that have confirmed the introduction",
   },
 };
+
+export const getStepById = (id: number): keyof typeof OnboardingStatuses => {
+  return Object.keys(OnboardingStatuses).find(
+    (key) => stepByStatus[key as keyof typeof OnboardingStatuses].stepId === id
+  ) as keyof typeof OnboardingStatuses;
+};

@@ -16,13 +16,6 @@ export const ActionCard = ({
         <h3 className="text-2xl font-bold flex items-center justify-center">
           {actionName}
         </h3>
-
-        {/* <ul className="space-y-2">
-          <li className="flex items-center">
-            <ArrowRight className="mr-2 flex-shrink-0" />
-            <span>{actionName}</span>
-          </li>
-        </ul> */}
       </div>
     </div>
   );

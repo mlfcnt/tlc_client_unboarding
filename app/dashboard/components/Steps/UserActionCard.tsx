@@ -60,6 +60,21 @@ export const UserActionCard = ({
           setShow={setShowProposeGroup}
         />
       )}
+      {currentStep === 6 && (
+        <ProposeGroupForm
+          user={user}
+          show={showProposeGroup}
+          setShow={setShowProposeGroup}
+        />
+      )}
+      {currentStep === 7 && (
+        <ProposeGroupForm
+          user={user}
+          show={showProposeGroup}
+          setShow={setShowProposeGroup}
+          showRefusedReason
+        />
+      )}
 
       <div
         key={userId}
@@ -124,6 +139,17 @@ export const UserActionCard = ({
                   }}
                 >
                   <Mail className="mr-2 h-4 w-4" /> Propose a group
+                </div>
+              )}
+              {currentStep === 7 && (
+                <div
+                  className="p-2 cursor-pointer hover:bg-slate-100 rounded flex items-center"
+                  onClick={() => {
+                    setShowProposeGroup(true);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <Mail className="mr-2 h-4 w-4" /> Propose a new group
                 </div>
               )}
             </DropdownMenuContent>

@@ -15,4 +15,5 @@ export type OnboardingRequest = {
   start_date: Date;
   phone_number: string;
   status: keyof typeof OnboardingStatuses;
+  group_refused_reason: string;
 };
