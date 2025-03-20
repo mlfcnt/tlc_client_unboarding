@@ -233,9 +233,10 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
         <div className="flex justify-end">
           <Button
             type="submit"
+            disabled={form.formState.isSubmitting}
             className="cursor-pointer hover:bg-green-900 bg-green-600 text-white"
           >
-            Submit
+            {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </div>
       </form>

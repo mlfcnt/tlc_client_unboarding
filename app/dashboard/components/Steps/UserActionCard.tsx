@@ -12,6 +12,7 @@ import {Mail, MoreHorizontal, ScanEye} from "lucide-react";
 import {UserDetailsCard} from "./UserDetailsCard";
 import {SendTestForm} from "./StepsActions/Step2/SendTestForm";
 import {NotifyAlert} from "./StepsActions/Step3/NotifyAlert";
+import {ProposeGroupForm} from "./StepsActions/Step4/ProposeGroupForm";
 
 export const UserActionCard = ({
   userId,
@@ -25,7 +26,7 @@ export const UserActionCard = ({
   const [showSendTest, setShowSendTest] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showNotifyAlert, setShowNotifyAlert] = useState(false);
-
+  const [showProposeGroup, setShowProposeGroup] = useState(false);
   return (
     <>
       {/* User Details Modal */}
@@ -49,6 +50,14 @@ export const UserActionCard = ({
           userId={userId}
           show={showNotifyAlert}
           setShow={setShowNotifyAlert}
+        />
+      )}
+
+      {currentStep === 4 && (
+        <ProposeGroupForm
+          user={user}
+          show={showProposeGroup}
+          setShow={setShowProposeGroup}
         />
       )}
 
@@ -104,6 +113,17 @@ export const UserActionCard = ({
                 >
                   <Mail className="mr-2 h-4 w-4" />
                   The user has completed the test
+                </div>
+              )}
+              {currentStep === 4 && (
+                <div
+                  className="p-2 cursor-pointer hover:bg-slate-100 rounded flex items-center"
+                  onClick={() => {
+                    setShowProposeGroup(true);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <Mail className="mr-2 h-4 w-4" /> Propose a group
                 </div>
               )}
             </DropdownMenuContent>

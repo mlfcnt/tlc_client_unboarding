@@ -90,18 +90,10 @@ export async function POST(request: NextRequest) {
     userEmail,
     userFirstname,
     userLastname,
-    adminEmail,
     startDate,
     level,
     additionalContent,
   } = await request.json();
-
-  if (!adminEmail) {
-    return NextResponse.json(
-      {error: "El email del administrador es obligatorio"},
-      {status: 400}
-    );
-  }
 
   if (!userEmail || !userFirstname || !userLastname) {
     return NextResponse.json(
@@ -112,7 +104,7 @@ export async function POST(request: NextRequest) {
 
   const {data, error} = await resend.emails.send({
     from: "TLC <mail@tlc-onboarding.com>",
-    to: adminEmail,
+    to: userEmail,
     subject: `Evaluación completada para ${userFirstname} ${userLastname} - Nivel ${level}`,
     react: await EmailTemplate({
       userInfo: {

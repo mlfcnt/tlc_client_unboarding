@@ -79,19 +79,6 @@ export const SendTestForm = ({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="email"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>User email</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="testLink"
               render={({field}) => (
                 <FormItem>
@@ -103,12 +90,26 @@ export const SendTestForm = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>User email</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex justify-end">
               <Button
                 type="submit"
+                disabled={form.formState.isSubmitting}
                 className="cursor-pointer hover:bg-green-900 bg-green-600 text-white"
               >
-                Submit
+                {form.formState.isSubmitting ? "Submitting..." : "Submit"}
               </Button>
             </div>
           </form>
