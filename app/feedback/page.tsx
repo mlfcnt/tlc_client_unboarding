@@ -1,9 +1,9 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useState, Suspense} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 
-export default function FeedbackPage() {
+function FeedbackForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
@@ -94,5 +94,13 @@ export default function FeedbackPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function FeedbackPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FeedbackForm />
+    </Suspense>
   );
 }
