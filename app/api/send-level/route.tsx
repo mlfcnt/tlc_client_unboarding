@@ -72,6 +72,35 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
       Por favor, confirme si esta fecha es adecuada o si necesita realizar algún
       ajuste.
     </p>
+    <div style={{marginTop: "20px", marginBottom: "20px"}}>
+      <a
+        href="#"
+        style={{
+          backgroundColor: "#4CAF50",
+          color: "white",
+          padding: "10px 20px",
+          textDecoration: "none",
+          borderRadius: "4px",
+          marginRight: "15px",
+          display: "inline-block",
+        }}
+      >
+        Aceptar
+      </a>
+      <a
+        href="#"
+        style={{
+          backgroundColor: "#f44336",
+          color: "white",
+          padding: "10px 20px",
+          textDecoration: "none",
+          borderRadius: "4px",
+          display: "inline-block",
+        }}
+      >
+        Rechazar
+      </a>
+    </div>
     <p>Atentamente,</p>
     <p>
       <strong>El equipo de TLC</strong>

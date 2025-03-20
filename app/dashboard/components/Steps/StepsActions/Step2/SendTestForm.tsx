@@ -35,6 +35,8 @@ export const SendTestForm = ({
   const {updateStatus} = useUpdateStatusAndInvalidateCache();
   const formSchema = z.object({
     email: z.string().email(),
+    testUsername: z.string(),
+    testPassword: z.string(),
     testLink: z.string().url(),
   });
 
@@ -43,6 +45,8 @@ export const SendTestForm = ({
     defaultValues: {
       email: user.email,
       testLink: "",
+      testUsername: "",
+      testPassword: "",
     },
   });
 
@@ -77,6 +81,32 @@ export const SendTestForm = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="testUsername"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>Test username</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="testPassword"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>Test password</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="testLink"

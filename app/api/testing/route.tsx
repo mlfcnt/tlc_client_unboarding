@@ -5,7 +5,7 @@ import {Resend} from "resend";
 
 export async function POST(request: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const {email, testLink} = await request.json();
+  const {email, testLink, testUsername, testPassword} = await request.json();
 
   const {data, error} = await resend.emails.send({
     from: "TLC <mail@tlc-onboarding.com>",
@@ -33,6 +33,32 @@ export async function POST(request: NextRequest) {
             margin: "20px 0",
           }}
         >
+          <p
+            style={{
+              fontSize: "1.1em",
+              fontWeight: "bold",
+              marginBottom: "15px",
+              color: "#2c5282",
+            }}
+          >
+            📝 Credenciales para acceder a su prueba:
+          </p>
+          <div
+            style={{
+              backgroundColor: "#ebf8ff",
+              padding: "15px",
+              borderRadius: "6px",
+              marginBottom: "20px",
+              border: "1px solid #90cdf4",
+            }}
+          >
+            <p style={{margin: "5px 0", fontSize: "1.1em"}}>
+              <strong>Usuario:</strong> {testUsername}
+            </p>
+            <p style={{margin: "5px 0", fontSize: "1.1em"}}>
+              <strong>Contraseña:</strong> {testPassword}
+            </p>
+          </div>
           <p
             style={{
               fontSize: "1.1em",
