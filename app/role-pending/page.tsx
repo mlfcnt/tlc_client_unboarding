@@ -8,33 +8,18 @@ export default async function RolePendingPage() {
   let redirectPath: string | null = null;
 
   try {
-    console.log("Role-pending page: Attempting to get current user...");
     const user = await currentUser();
-    console.log(
-      "Role-pending page: Current user:",
-      user ? `User ID: ${user.id}` : "No user found"
-    );
 
     // If no user is found, redirect to sign-in
     if (!user) {
-      console.log(
-        "Role-pending page: No user found, setting redirect to sign-in"
-      );
       redirectPath = "/sign-in";
     } else {
       // If user has a role, redirect to appropriate dashboard
       const role = user.publicMetadata?.role as string | undefined;
-      console.log("Role-pending page: User role:", role || "No role assigned");
 
       if (role === "admin") {
-        console.log(
-          "Role-pending page: User is admin, setting redirect to admin dashboard"
-        );
         redirectPath = "/dashboard";
       } else if (role === "sales") {
-        console.log(
-          "Role-pending page: User is sales, setting redirect to sales dashboard"
-        );
         redirectPath = "/dashboard";
       } else {
         // User is authenticated but has no role, show pending page
@@ -47,7 +32,6 @@ export default async function RolePendingPage() {
             },
           }
         );
-        console.log("Role-pending page: Updated user:", updatedUser);
         redirectPath = "/dashboard";
       }
     }

@@ -86,6 +86,7 @@ export const ProposeGroupForm = ({
           startDate: format(startDate, "PPPP"),
           level,
           additionalContent,
+          userId: user.id,
         }),
       });
       if (!response.ok) {
@@ -97,6 +98,7 @@ export const ProposeGroupForm = ({
         newStatus: getKeyFromValue(OnboardingStatuses.class_proposed),
         userId: user.id,
       });
+      setShow(false);
       form.reset();
     } catch (error) {
       console.error(error);

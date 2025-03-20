@@ -9,6 +9,7 @@ interface EmailTemplateProps {
     firstname: string;
     lastname: string;
     email: string;
+    id: string;
   };
   level: string;
   startDate: string;
@@ -22,6 +23,15 @@ const formatDate = (dateString: string) => {
     month: "2-digit",
     year: "numeric",
   }).format(date);
+};
+
+const formatDateForUrl = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
 };
 
 const EmailTemplate: React.FC<EmailTemplateProps> = ({
@@ -74,7 +84,9 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
     </p>
     <div style={{marginTop: "20px", marginBottom: "20px"}}>
       <a
-        href="#"
+        href={`${process.env.NEXT_PUBLIC_BASE_URL}/api/accept-proposal/${
+          userInfo.id
+        }?startDate=${encodeURIComponent(formatDateForUrl(startDate))}`}
         style={{
           backgroundColor: "#4CAF50",
           color: "white",
@@ -88,7 +100,7 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
         Aceptar
       </a>
       <a
-        href="#"
+        href={`${process.env.NEXT_PUBLIC_BASE_URL}/feedback?userId=${userInfo.id}`}
         style={{
           backgroundColor: "#f44336",
           color: "white",
@@ -122,11 +134,12 @@ export async function POST(request: NextRequest) {
     startDate,
     level,
     additionalContent,
+    userId,
   } = await request.json();
 
-  if (!userEmail || !userFirstname || !userLastname) {
+  if (!userEmail || !userFirstname || !userLastname || !userId) {
     return NextResponse.json(
-      {error: "El email del usuario es obligatorio"},
+      {error: "El email y la información del usuario son obligatorios"},
       {status: 400}
     );
   }
@@ -140,6 +153,7 @@ export async function POST(request: NextRequest) {
         firstname: userFirstname,
         lastname: userLastname,
         email: userEmail,
+        id: userId,
       },
       level,
       startDate,

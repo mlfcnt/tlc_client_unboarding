@@ -19,4 +19,5 @@ export type TestRequest = {
   status: "pending" | "completed" | "cancelled";
   sales_person_id: string;
   phone_number: string;
+  group_refused_reason: string;
 };

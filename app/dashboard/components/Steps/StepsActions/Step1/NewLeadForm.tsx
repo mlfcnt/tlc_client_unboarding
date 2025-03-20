@@ -54,7 +54,7 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
       phoneNumber: "",
       idNumber: "",
       skipTest: false,
-      level: "A1",
+      level: undefined,
       leadRemarks: "",
     },
   });
@@ -93,8 +93,8 @@ export const NewLeadForm = ({onSuccess}: {onSuccess: () => void}) => {
       queryClient.invalidateQueries({
         queryKey: [REACT_QUERY_KEYS.ONBOARDING_REQUESTS],
       });
-      form.reset();
       onSuccess();
+      form.reset();
     }
   };
   return (

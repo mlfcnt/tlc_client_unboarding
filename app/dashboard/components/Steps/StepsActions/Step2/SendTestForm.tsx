@@ -65,6 +65,7 @@ export const SendTestForm = ({
         newStatus: getKeyFromValue(OnboardingStatuses.test_sent),
         userId: user.id,
       });
+      setShow(false);
       form.reset();
     } catch (error) {
       console.error(error);
