@@ -59,7 +59,8 @@ export const StepCard = ({
         {/* User count circle */}
         <div
           className={cn(
-            "absolute -bottom-2 -right-2 w-9 h-9 rounded-full border-2 border-black flex items-center justify-center",
+            "absolute -bottom-2 -right-2 rounded-full border-2 border-black flex items-center justify-center",
+            amountOfUsersAtThisStep === 0 ? "w-6 h-6" : "w-9 h-9",
             getUserCountColor()
           )}
         >
