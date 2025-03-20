@@ -50,7 +50,7 @@ export async function GET(
     const startDateIso = parseFormattedDate(startDateFormatted);
 
     // First, let's check if the record exists and what fields it has
-    const {data: testRequest, error: fetchError} = await supabase
+    const {error: fetchError} = await supabase
       .from(DATABASE_TABLES.ONBOARDING_REQUESTS)
       .select("*")
       .eq("id", userId)
@@ -76,7 +76,7 @@ export async function GET(
     };
 
     // Update the status, start date, and level in Supabase
-    const {data, error} = await supabase
+    const {error} = await supabase
       .from(DATABASE_TABLES.ONBOARDING_REQUESTS)
       .update(updateData)
       .eq("id", userId)

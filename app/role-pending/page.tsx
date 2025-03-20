@@ -24,14 +24,11 @@ export default async function RolePendingPage() {
       } else {
         // User is authenticated but has no role, show pending page
         const clerkClient = await clerk();
-        const updatedUser = await clerkClient.users.updateUserMetadata(
-          user.id,
-          {
-            publicMetadata: {
-              role: "sales",
-            },
-          }
-        );
+        await clerkClient.users.updateUserMetadata(user.id, {
+          publicMetadata: {
+            role: "sales",
+          },
+        });
         redirectPath = "/dashboard";
       }
     }
