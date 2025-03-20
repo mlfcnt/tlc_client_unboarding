@@ -24,7 +24,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           <body className="bg-gray-100">
             <Header />
             <main className="pt-8">{children}</main>
-            <Toaster />
+            <Toaster position="top-right" />
           </body>
         </html>
       </ClerkProvider>

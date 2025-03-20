@@ -1,12 +1,13 @@
 import {
   OnboardingStatuses,
   stepByStatus,
+  StepOwner,
 } from "@/app/constants/OnboardingStatuses";
 
 export type ProcessStep = {
   id: number;
   name: string;
-  owner: string;
+  owner: StepOwner;
   description: string;
   salesActions: string[];
   adminActions: string[];

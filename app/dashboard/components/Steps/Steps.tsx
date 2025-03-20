@@ -5,12 +5,20 @@ import {StepCard} from "./StepCard";
 import {ArrowRight} from "lucide-react";
 import {StepLegend} from "./StepLegend";
 import {useUsersAtStep} from "../../api/useUsersPerStep";
+import {useUser} from "@clerk/nextjs";
+import {toast} from "sonner";
 
 export const Steps = () => {
+  const {user} = useUser();
   const {getUsersAtStep} = useUsersAtStep();
   const [expandedStep, setExpandedStep] = useState<number | null>(1);
 
   const handleStepClick = (stepId: number) => {
+    const step = processSteps.find((step) => step.id === stepId)!;
+    if (step.owner === "admin" && user?.publicMetadata.role !== "admin") {
+      toast.error("This step is only available for admins");
+      return;
+    }
     setExpandedStep(stepId);
   };
 
