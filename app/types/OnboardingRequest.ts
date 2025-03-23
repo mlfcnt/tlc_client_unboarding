@@ -16,4 +16,5 @@ export type OnboardingRequest = {
   phone_number: string;
   status: keyof typeof OnboardingStatuses;
   group_refused_reason: string;
+  contract_request_notes: string;
 };

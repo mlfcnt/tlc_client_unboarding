@@ -8,11 +8,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
-import {Mail, MoreHorizontal, ScanEye} from "lucide-react";
+import {FileText, Mail, MoreHorizontal, ScanEye} from "lucide-react";
 import {UserDetailsCard} from "./UserDetailsCard";
 import {SendTestForm} from "./StepsActions/Step2/SendTestForm";
 import {NotifyAlert} from "./StepsActions/Step3/NotifyAlert";
 import {ProposeGroupForm} from "./StepsActions/Step4/ProposeGroupForm";
+import {ContractRequestForm} from "./StepsActions/Step6/ContractRequestForm";
 
 export const UserActionCard = ({
   userId,
@@ -27,6 +28,8 @@ export const UserActionCard = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showNotifyAlert, setShowNotifyAlert] = useState(false);
   const [showProposeGroup, setShowProposeGroup] = useState(false);
+  const [showContractRequest, setShowContractRequest] = useState(false);
+
   return (
     <>
       {/* User Details Modal */}
@@ -60,13 +63,16 @@ export const UserActionCard = ({
           setShow={setShowProposeGroup}
         />
       )}
+
+      {/* Contract Request Form */}
       {currentStep === 6 && (
-        <ProposeGroupForm
+        <ContractRequestForm
           user={user}
-          show={showProposeGroup}
-          setShow={setShowProposeGroup}
+          show={showContractRequest}
+          setShow={setShowContractRequest}
         />
       )}
+
       {currentStep === 7 && (
         <ProposeGroupForm
           user={user}
@@ -139,6 +145,17 @@ export const UserActionCard = ({
                   }}
                 >
                   <Mail className="mr-2 h-4 w-4" /> Propose a group
+                </div>
+              )}
+              {currentStep === 6 && (
+                <div
+                  className="p-2 cursor-pointer hover:bg-slate-100 rounded flex items-center"
+                  onClick={() => {
+                    setShowContractRequest(true);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <FileText className="mr-2 h-4 w-4" /> Request a contract
                 </div>
               )}
               {currentStep === 7 && (
