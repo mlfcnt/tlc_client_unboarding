@@ -44,7 +44,7 @@ export const SendTestForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: user.email,
-      testLink: "",
+      testLink: "https://cet.educationtlc.com/login",
       testUsername: "",
       testPassword: "",
     },
