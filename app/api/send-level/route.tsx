@@ -87,7 +87,7 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
     </p>
     <div style={{marginTop: "20px", marginBottom: "20px"}}>
       <a
-        href={`${process.env.NEXT_PUBLIC_BASE_URL}/api/accept-proposal/${
+        href={`${process.env.NEXT_PUBLIC_BASE_URL}/api/public/accept-proposal/${
           userInfo.id
         }?startDate=${encodeURIComponent(formatDateForUrl(startDate))}`}
         style={{

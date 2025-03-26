@@ -24,7 +24,7 @@ function FeedbackForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/reject-proposal", {
+      const response = await fetch("/api/public/reject-proposal", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
