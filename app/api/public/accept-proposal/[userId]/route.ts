@@ -8,10 +8,10 @@ import {DATABASE_TABLES} from "@/app/constants/databaseTables";
 
 export async function GET(
   request: NextRequest,
-  {params}: {params: {userId: string}}
+  context: {params: {userId: string}}
 ) {
   try {
-    const userId = params.userId;
+    const userId = context.params.userId;
     const searchParams = request.nextUrl.searchParams;
     const startDate = searchParams.get("startDate");
 
