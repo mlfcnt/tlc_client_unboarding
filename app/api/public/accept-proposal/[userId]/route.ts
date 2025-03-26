@@ -6,12 +6,15 @@ import {
 } from "@/app/constants/OnboardingStatuses";
 import {DATABASE_TABLES} from "@/app/constants/databaseTables";
 
-export async function GET(
-  request: NextRequest,
-  context: {params: {userId: string}}
-) {
+type RouteContext = {
+  params: Promise<{
+    userId: string;
+  }>;
+};
+
+export async function GET(request: NextRequest, {params}: RouteContext) {
   try {
-    const userId = context.params.userId;
+    const {userId} = await params;
     const searchParams = request.nextUrl.searchParams;
     const startDate = searchParams.get("startDate");
 

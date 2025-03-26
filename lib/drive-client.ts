@@ -1,28 +1,29 @@
 import {google} from "googleapis";
-import {JWT} from "google-auth-library";
+import {GoogleAuth} from "google-auth-library";
 import {OnboardingRequest} from "@/app/types/OnboardingRequest";
 
 // Initialize the Google Drive client
-const initializeDriveClient = (): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    try {
-      // If running in production, use the credentials from environment variables
-      const auth = new JWT({
-        email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(
+const initializeDriveClient = async (): Promise<any> => {
+  try {
+    const auth = new GoogleAuth({
+      credentials: {
+        type: "service_account",
+        project_id: process.env.GOOGLE_CLOUD_PROJECT_ID,
+        private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(
           /\\n/g,
           "\n"
         ),
-        scopes: ["https://www.googleapis.com/auth/drive.file"],
-      });
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      },
+      scopes: ["https://www.googleapis.com/auth/drive.file"],
+    });
 
-      const drive = google.drive({version: "v3", auth});
-      resolve(drive);
-    } catch (error) {
-      console.error("Error initializing Google Drive client:", error);
-      reject(error);
-    }
-  });
+    const client = await auth.getClient();
+    return google.drive({version: "v3", auth: client as any});
+  } catch (error) {
+    console.error("Error initializing Google Drive client:", error);
+    throw error;
+  }
 };
 
 /**
