@@ -1,10 +1,15 @@
 import {currentUser, clerkClient as clerk} from "@clerk/nextjs/server";
 import Link from "next/link";
 import {redirect} from "next/navigation";
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+  title: "Redirecting - TLC Onboarding",
+};
 
 export const dynamic = "force-dynamic";
 
-export default async function RolePendingPage() {
+export default async function RedirectPage() {
   let redirectPath: string | null = null;
 
   try {
@@ -33,7 +38,7 @@ export default async function RolePendingPage() {
       }
     }
   } catch (error) {
-    console.error("Error in Role-pending page:", error);
+    console.error("Error in Redirect page:", error);
 
     // Show detailed error information in development
     const errorMessage =
@@ -71,7 +76,7 @@ export default async function RolePendingPage() {
   } finally {
     // Handle redirects after all resources are cleaned up
     if (redirectPath) {
-      console.log(`Role-pending page: Executing redirect to ${redirectPath}`);
+      console.log(`Redirect page: Executing redirect to ${redirectPath}`);
       redirect(redirectPath);
     }
   }

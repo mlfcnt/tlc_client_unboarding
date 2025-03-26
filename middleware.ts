@@ -18,8 +18,8 @@ export default clerkMiddleware(async (auth, req) => {
 
   // If authenticated and trying to access root, redirect to appropriate dashboard
   if (path === "/") {
-    // For now, redirect to role-pending, the page itself will handle further redirection
-    return NextResponse.redirect(new URL("/role-pending", req.url));
+    // For now, redirect to redirect, the page itself will handle further redirection
+    return NextResponse.redirect(new URL("/redirect", req.url));
   }
 
   return NextResponse.next();
