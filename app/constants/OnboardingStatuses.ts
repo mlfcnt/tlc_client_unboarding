@@ -1,16 +1,16 @@
 export const OnboardingStatuses = {
   before_lead_created: "Lead creation",
-  lead_created: "Leads awaiting test",
-  test_sent: "Test sent",
-  test_completed: "Test completed",
-  class_proposed: "Class proposed",
-  class_confirmed: "Class confirmed",
-  class_refused: "Class refused",
-  contract_requested: "Contract requested",
-  contract_sent: "Contract sent",
-  contract_signed: "Contract signed",
-  activated: "Activated",
-  introduction_confirmed: "Introduction confirmed",
+  lead_created: "Ready to test",
+  test_sent: "Test in progress",
+  test_completed: "Level confirmation",
+  class_proposed: "Class confirmation",
+  class_confirmed: "Confirmed class",
+  class_refused: "Refused class",
+  contract_requested: "Contract requests",
+  contract_sent: "Contracts a signature",
+  contract_signed: "Enrolment confirmation",
+  activated: "Client activation",
+  introduction_confirmed: "Introduction confirmation",
 } as const;
 
 // Utility function to get the key from a value
