@@ -11,6 +11,15 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.next();
   }
 
+  // Allow access to public API routes without authentication
+  if (
+    path.startsWith("/api/public/") ||
+    path.startsWith("/feedback") ||
+    path.startsWith("/proposal-accepted")
+  ) {
+    return NextResponse.next();
+  }
+
   // Redirect to sign-in if not authenticated
   if (!userId) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
