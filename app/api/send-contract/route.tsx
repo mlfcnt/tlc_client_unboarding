@@ -3,7 +3,6 @@ import {Resend} from "resend";
 import * as React from "react";
 import {renderToBuffer} from "@react-pdf/renderer";
 import {ContractDocument} from "@/app/dashboard/components/Steps/StepsActions/Step8/ContractDocument";
-import {useUpdateStatusAndInvalidateCache} from "@/app/dashboard/api/updateStatus";
 
 const EmailTemplate: React.FC<{studentName: string}> = ({studentName}) => (
   <div
@@ -40,7 +39,6 @@ const EmailTemplate: React.FC<{studentName: string}> = ({studentName}) => (
 export async function POST(request: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const data = await request.json();
-  const {updateStatus} = useUpdateStatusAndInvalidateCache();
 
   if (!data.email || !data.studentName || !data.userId) {
     return NextResponse.json(
