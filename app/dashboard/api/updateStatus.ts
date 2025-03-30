@@ -27,7 +27,7 @@ export const useUpdateStatusAndInvalidateCache = () => {
     queryClient.invalidateQueries({
       queryKey: [REACT_QUERY_KEYS.ONBOARDING_REQUESTS],
     });
-    return data;
+    return {data, error};
   };
   return {updateStatus};
 };

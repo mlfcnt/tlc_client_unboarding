@@ -1,3 +1,5 @@
+// eslint-disable @next/next/no-img-element
+
 // send email to the end user using Resend
 
 import {NextRequest, NextResponse} from "next/server";
@@ -174,7 +176,7 @@ export async function POST(request: NextRequest) {
               <strong>Producción Oral:</strong> En la parte de speaking,
               queremos escuchar tu voz auténtica y espontánea. Leer textos
               preparados resultará en una calificación de cero, así que
-              ¡relájate y muéstranos tu mejor versión!
+              &ldquo;relájate y muéstranos tu mejor versión!&rdquo;
             </p>
             <div style={{textAlign: "center"}}>
               <img

@@ -7,7 +7,7 @@ export const OnboardingStatuses = {
   class_confirmed: "Confirmed class",
   class_refused: "Refused class",
   contract_requested: "Contract requests",
-  contract_sent: "Contracts a signature",
+  contract_sent: "Contracts to sign",
   contract_signed: "Enrolment confirmation",
   activated: "Client activation",
   introduction_confirmed: "Introduction confirmation",

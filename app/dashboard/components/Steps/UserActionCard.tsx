@@ -14,6 +14,7 @@ import {SendTestForm} from "./StepsActions/Step2/SendTestForm";
 import {NotifyAlert} from "./StepsActions/Step3/NotifyAlert";
 import {ProposeGroupForm} from "./StepsActions/Step4/ProposeGroupForm";
 import {ContractRequestForm} from "./StepsActions/Step6/ContractRequestForm";
+import {SendContractForm} from "./StepsActions/Step8/SendContractForm";
 
 export const UserActionCard = ({
   userId,
@@ -29,6 +30,7 @@ export const UserActionCard = ({
   const [showNotifyAlert, setShowNotifyAlert] = useState(false);
   const [showProposeGroup, setShowProposeGroup] = useState(false);
   const [showContractRequest, setShowContractRequest] = useState(false);
+  const [showSendContract, setShowSendContract] = useState(false);
 
   return (
     <>
@@ -79,6 +81,14 @@ export const UserActionCard = ({
           show={showProposeGroup}
           setShow={setShowProposeGroup}
           showRefusedReason
+        />
+      )}
+
+      {currentStep === 8 && (
+        <SendContractForm
+          user={user}
+          show={showSendContract}
+          setShow={setShowSendContract}
         />
       )}
 
@@ -167,6 +177,17 @@ export const UserActionCard = ({
                   }}
                 >
                   <Mail className="mr-2 h-4 w-4" /> Propose a new group
+                </div>
+              )}
+              {currentStep === 8 && (
+                <div
+                  className="p-2 cursor-pointer hover:bg-slate-100 rounded flex items-center"
+                  onClick={() => {
+                    setShowSendContract(true);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <FileText className="mr-2 h-4 w-4" /> Send contract
                 </div>
               )}
             </DropdownMenuContent>
