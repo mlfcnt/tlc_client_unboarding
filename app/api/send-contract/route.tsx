@@ -4,6 +4,17 @@ import * as React from "react";
 import {renderToBuffer} from "@react-pdf/renderer";
 import {ContractDocument} from "@/app/dashboard/components/Steps/StepsActions/Step8/ContractDocument";
 
+// Debugging function to safely stringify objects
+const safeStringify = (obj: any) => {
+  try {
+    return JSON.stringify(obj, null, 2);
+  } catch (error) {
+    return `[Error stringifying object: ${
+      error instanceof Error ? error.message : String(error)
+    }]`;
+  }
+};
+
 const EmailTemplate: React.FC<{studentName: string}> = ({studentName}) => (
   <div
     style={{
@@ -41,7 +52,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const data = await request.json();
-    console.log("Received contract data:", JSON.stringify(data, null, 2));
+    console.log("Received contract data:", safeStringify(data));
 
     // Validate required fields
     if (!data.email || !data.studentName || !data.userId) {
@@ -72,49 +83,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Format schedule time properly
-    if (data.schedule && !data.schedule.includes(":")) {
-      // If schedule is just a number without colon, format it
-      if (!isNaN(parseInt(data.schedule))) {
-        const hour = parseInt(data.schedule);
-        data.schedule = `${hour.toString().padStart(2, "0")}:00`;
-      } else {
-        console.error("Invalid schedule format:", data.schedule);
-        return NextResponse.json(
-          {error: "Invalid schedule format. Expected HH:MM"},
-          {status: 400}
-        );
-      }
-    }
+    // Ensure the data is properly formatted
+    const cleanData = {
+      studentName: String(data.studentName),
+      documentId: String(data.documentId),
+      email: String(data.email),
+      phone: String(data.phone),
+      courseType: String(data.courseType),
+      days: Array.isArray(data.days) ? data.days.map(String) : [],
+      schedule: String(data.schedule),
+      modality: String(data.modality),
+      totalValue: String(data.totalValue),
+      paymentMethod: String(data.paymentMethod),
+      paymentDates: String(data.paymentDates),
+      startDate: String(data.startDate),
+    };
+
+    console.log("Cleaned data for PDF generation:", safeStringify(cleanData));
 
     // Generate PDF buffer
     try {
-      console.log(
-        "Generating PDF with data:",
-        JSON.stringify(
-          {
-            studentName: data.studentName,
-            documentId: data.documentId,
-            email: data.email,
-            phone: data.phone,
-            courseType: data.courseType,
-            days: data.days,
-            schedule: data.schedule,
-            modality: data.modality,
-            totalValue: data.totalValue,
-            paymentMethod: data.paymentMethod,
-            paymentDates: data.paymentDates,
-            startDate: data.startDate,
-          },
-          null,
-          2
-        )
-      );
+      console.log("Attempting to generate PDF...");
 
-      const pdfDoc = <ContractDocument data={data} showHighlights={false} />;
+      const pdfDoc = (
+        <ContractDocument data={cleanData} showHighlights={false} />
+      );
+      console.log("PDF document component created successfully");
+
       const pdfBuffer = await renderToBuffer(pdfDoc);
+      console.log("PDF buffer generated successfully, size:", pdfBuffer.length);
 
       // Send email with PDF attachment
+      console.log("Attempting to send email...");
       const {data: emailData, error} = await resend.emails.send({
         from: "TLC <mail@tlc-onboarding.com>",
         to: data.email,
@@ -129,22 +129,37 @@ export async function POST(request: NextRequest) {
       });
 
       if (error) {
+        console.error("Resend API error:", error);
         throw error;
       }
 
+      console.log("Email sent successfully:", safeStringify(emailData));
       return NextResponse.json({data: emailData}, {status: 200});
     } catch (pdfError: any) {
-      console.error("PDF generation error:", pdfError);
-      console.error("Error details:", pdfError.stack);
+      console.error("PDF generation or email sending error:", pdfError);
+      if (pdfError.stack) {
+        console.error("Error stack trace:", pdfError.stack);
+      }
+
       return NextResponse.json(
-        {error: `PDF generation failed: ${pdfError.message}`},
+        {
+          error: `PDF generation failed: ${
+            pdfError.message || "Unknown error"
+          }`,
+          errorType: pdfError.name || "UnknownError",
+          errorDetails: pdfError.stack || "No stack trace available",
+        },
         {status: 500}
       );
     }
   } catch (error: any) {
-    console.error("Error sending contract:", error);
+    console.error("Error processing contract request:", error);
     return NextResponse.json(
-      {error: error.message || "Failed to send contract"},
+      {
+        error: error.message || "Failed to send contract",
+        errorType: error.name || "UnknownError",
+        errorDetails: error.stack || "No stack trace available",
+      },
       {status: 500}
     );
   }

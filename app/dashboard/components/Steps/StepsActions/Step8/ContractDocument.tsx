@@ -135,11 +135,14 @@ export const ContractDocument = ({
     return translations[day] || day;
   };
 
-  const currentDate = new Date().toLocaleDateString("es-CO", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  // Simplify current date handling to avoid locale issues
+  const currentDate = (() => {
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  })();
 
   const getDynamicFieldStyle = () => {
     return showHighlights
@@ -215,36 +218,39 @@ export const ContractDocument = ({
           <Text style={styles.listItem}>
             <Text style={styles.dynamicLabel}>• Día(s): </Text>
             <Text style={getDynamicFieldStyle()}>
-              {data.days.map((day) => translateDay(day)).join(", ")}
+              {(() => {
+                try {
+                  if (
+                    !data.days ||
+                    !Array.isArray(data.days) ||
+                    data.days.length === 0
+                  ) {
+                    return "";
+                  }
+                  return data.days
+                    .map((day) => {
+                      try {
+                        return translateDay(day) || day;
+                      } catch (e) {
+                        return day;
+                      }
+                    })
+                    .join(", ");
+                } catch (error) {
+                  console.error("Error processing days:", error);
+                  return data.days
+                    ? Array.isArray(data.days)
+                      ? data.days.join(", ")
+                      : String(data.days)
+                    : "";
+                }
+              })()}
             </Text>
           </Text>
           <Text style={styles.listItem}>
             <Text style={styles.dynamicLabel}>• Hora: </Text>
             <Text style={getDynamicFieldStyle()}>
-              {data.schedule
-                ? (() => {
-                    try {
-                      // Ensure schedule is in HH:MM format
-                      const scheduleTime = data.schedule.includes(":")
-                        ? data.schedule
-                        : `${data.schedule}:00`;
-
-                      return new Date(`2000-01-01T${scheduleTime}`)
-                        .toLocaleTimeString("es-CO", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })
-                        .replace(
-                          /(AM|PM)/,
-                          (match) => match?.toLowerCase() || ""
-                        );
-                    } catch (error) {
-                      console.error("Error formatting schedule time:", error);
-                      return data.schedule; // Fallback to raw schedule value
-                    }
-                  })()
-                : ""}
+              {data.schedule ? data.schedule : ""}
             </Text>
           </Text>
           <Text style={styles.listItem}>
