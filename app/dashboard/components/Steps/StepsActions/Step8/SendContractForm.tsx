@@ -1,4 +1,6 @@
-import React, {useState, useRef, useEffect} from "react";
+"use client";
+
+import React, {useState, useRef, useEffect, Suspense} from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,26 +33,29 @@ import {z} from "zod";
 import {toast} from "sonner";
 import {useUserRequest} from "@/app/dashboard/api/useUserRequest";
 import {ContractDocument} from "./ContractDocument";
-import dynamic from "next/dynamic";
 import {Loader2, Maximize2, Minimize2} from "lucide-react";
 import {
   getKeyFromValue,
   OnboardingStatuses,
 } from "@/app/constants/OnboardingStatuses";
 import {useUpdateStatusAndInvalidateCache} from "@/app/dashboard/api/updateStatus";
+import {PDFViewer} from "@react-pdf/renderer";
 
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-        <p className="ml-2">Loading Preview...</p>
-      </div>
-    ),
-  }
-);
+// Loading component for the PDF viewer
+const PDFViewerWithFallback = ({children, ...props}: any) => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-full">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+          <p className="ml-2">Loading Preview...</p>
+        </div>
+      }
+    >
+      <PDFViewer {...props}>{children}</PDFViewer>
+    </Suspense>
+  );
+};
 
 interface SendContractFormProps {
   user: OnboardingRequest;
@@ -143,7 +148,7 @@ const FullScreenPDFViewer = ({
       </div>
 
       <div className="flex-grow relative min-h-0">
-        <PDFViewer
+        <PDFViewerWithFallback
           width="100%"
           height="100%"
           style={{
@@ -156,7 +161,7 @@ const FullScreenPDFViewer = ({
           }}
         >
           <ContractDocument data={data} showHighlights={true} />
-        </PDFViewer>
+        </PDFViewerWithFallback>
       </div>
 
       <div className="flex justify-end gap-4 p-4 border-t bg-white">

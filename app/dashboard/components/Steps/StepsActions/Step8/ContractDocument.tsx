@@ -1,5 +1,13 @@
+"use client";
+
 import React from "react";
-import {Page, Text, View, Document, StyleSheet} from "@react-pdf/renderer";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+} from "@react-pdf/renderer/lib/react-pdf.js";
 import {z} from "zod";
 
 // Define the schema based on SendContractForm's schema
@@ -10,7 +18,7 @@ const contractDataSchema = z.object({
   phone: z.string(),
   courseType: z.string(),
   days: z.array(z.string()),
-  hour: z.string(),
+  schedule: z.string(),
   modality: z.string(),
   totalValue: z.string(),
   paymentMethod: z.string(),
@@ -213,8 +221,8 @@ export const ContractDocument = ({
           <Text style={styles.listItem}>
             <Text style={styles.dynamicLabel}>• Hora: </Text>
             <Text style={getDynamicFieldStyle()}>
-              {data.hour
-                ? new Date(`2000-01-01T${data.hour}`)
+              {data.schedule
+                ? new Date(`2000-01-01T${data.schedule}`)
                     .toLocaleTimeString("es-CO", {
                       hour: "2-digit",
                       minute: "2-digit",
