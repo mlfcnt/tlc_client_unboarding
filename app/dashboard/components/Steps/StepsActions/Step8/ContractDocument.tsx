@@ -222,13 +222,28 @@ export const ContractDocument = ({
             <Text style={styles.dynamicLabel}>• Hora: </Text>
             <Text style={getDynamicFieldStyle()}>
               {data.schedule
-                ? new Date(`2000-01-01T${data.schedule}`)
-                    .toLocaleTimeString("es-CO", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })
-                    .replace(/(AM|PM)/, (match) => match.toLowerCase())
+                ? (() => {
+                    try {
+                      // Ensure schedule is in HH:MM format
+                      const scheduleTime = data.schedule.includes(":")
+                        ? data.schedule
+                        : `${data.schedule}:00`;
+
+                      return new Date(`2000-01-01T${scheduleTime}`)
+                        .toLocaleTimeString("es-CO", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })
+                        .replace(
+                          /(AM|PM)/,
+                          (match) => match?.toLowerCase() || ""
+                        );
+                    } catch (error) {
+                      console.error("Error formatting schedule time:", error);
+                      return data.schedule; // Fallback to raw schedule value
+                    }
+                  })()
                 : ""}
             </Text>
           </Text>

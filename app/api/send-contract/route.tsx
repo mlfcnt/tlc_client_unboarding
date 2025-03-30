@@ -38,39 +38,109 @@ const EmailTemplate: React.FC<{studentName: string}> = ({studentName}) => (
 
 export async function POST(request: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const data = await request.json();
-
-  if (!data.email || !data.studentName || !data.userId) {
-    return NextResponse.json(
-      {error: "Email, student name, and user ID are required"},
-      {status: 400}
-    );
-  }
 
   try {
-    // Generate PDF buffer
-    const pdfDoc = <ContractDocument data={data} showHighlights={false} />;
-    const pdfBuffer = await renderToBuffer(pdfDoc);
+    const data = await request.json();
+    console.log("Received contract data:", JSON.stringify(data, null, 2));
 
-    // Send email with PDF attachment
-    const {data: emailData, error} = await resend.emails.send({
-      from: "TLC <mail@tlc-onboarding.com>",
-      to: data.email,
-      subject: `Contrato de Servicios - ${data.studentName}`,
-      react: <EmailTemplate studentName={data.studentName} />,
-      attachments: [
-        {
-          filename: `contrato_${data.studentName.replace(/\s+/g, "_")}.pdf`,
-          content: pdfBuffer,
-        },
-      ],
-    });
-
-    if (error) {
-      throw error;
+    // Validate required fields
+    if (!data.email || !data.studentName || !data.userId) {
+      return NextResponse.json(
+        {error: "Email, student name, and user ID are required"},
+        {status: 400}
+      );
     }
 
-    return NextResponse.json({data: emailData}, {status: 200});
+    // Ensure all required fields for the ContractDocument are present
+    if (
+      !data.documentId ||
+      !data.phone ||
+      !data.courseType ||
+      !data.days ||
+      !Array.isArray(data.days) ||
+      data.days.length === 0 ||
+      !data.schedule ||
+      !data.modality ||
+      !data.totalValue ||
+      !data.paymentMethod ||
+      !data.paymentDates ||
+      !data.startDate
+    ) {
+      return NextResponse.json(
+        {error: "Missing required contract fields"},
+        {status: 400}
+      );
+    }
+
+    // Format schedule time properly
+    if (data.schedule && !data.schedule.includes(":")) {
+      // If schedule is just a number without colon, format it
+      if (!isNaN(parseInt(data.schedule))) {
+        const hour = parseInt(data.schedule);
+        data.schedule = `${hour.toString().padStart(2, "0")}:00`;
+      } else {
+        console.error("Invalid schedule format:", data.schedule);
+        return NextResponse.json(
+          {error: "Invalid schedule format. Expected HH:MM"},
+          {status: 400}
+        );
+      }
+    }
+
+    // Generate PDF buffer
+    try {
+      console.log(
+        "Generating PDF with data:",
+        JSON.stringify(
+          {
+            studentName: data.studentName,
+            documentId: data.documentId,
+            email: data.email,
+            phone: data.phone,
+            courseType: data.courseType,
+            days: data.days,
+            schedule: data.schedule,
+            modality: data.modality,
+            totalValue: data.totalValue,
+            paymentMethod: data.paymentMethod,
+            paymentDates: data.paymentDates,
+            startDate: data.startDate,
+          },
+          null,
+          2
+        )
+      );
+
+      const pdfDoc = <ContractDocument data={data} showHighlights={false} />;
+      const pdfBuffer = await renderToBuffer(pdfDoc);
+
+      // Send email with PDF attachment
+      const {data: emailData, error} = await resend.emails.send({
+        from: "TLC <mail@tlc-onboarding.com>",
+        to: data.email,
+        subject: `Contrato de Servicios - ${data.studentName}`,
+        react: <EmailTemplate studentName={data.studentName} />,
+        attachments: [
+          {
+            filename: `contrato_${data.studentName.replace(/\s+/g, "_")}.pdf`,
+            content: pdfBuffer,
+          },
+        ],
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      return NextResponse.json({data: emailData}, {status: 200});
+    } catch (pdfError: any) {
+      console.error("PDF generation error:", pdfError);
+      console.error("Error details:", pdfError.stack);
+      return NextResponse.json(
+        {error: `PDF generation failed: ${pdfError.message}`},
+        {status: 500}
+      );
+    }
   } catch (error: any) {
     console.error("Error sending contract:", error);
     return NextResponse.json(

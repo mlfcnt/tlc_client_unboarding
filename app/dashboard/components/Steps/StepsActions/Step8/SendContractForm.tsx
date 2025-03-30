@@ -164,13 +164,13 @@ const FullScreenPDFViewer = ({
         </PDFViewerWithFallback>
       </div>
 
-      <div className="flex justify-end gap-4 p-4 border-t bg-white">
+      <div className="flex justify-end gap-4 p-4 border-t bg-white cursor-pointer">
         <Button variant="outline" onClick={onClose} className="px-6">
           Edit Details
         </Button>
         <Button
           onClick={onConfirm}
-          className="px-6 bg-green-600 hover:bg-green-700 text-white"
+          className="px-6 bg-green-600 hover:bg-green-700 text-white cursor-pointer"
         >
           Confirm and Send
         </Button>
