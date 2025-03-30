@@ -231,7 +231,7 @@ export const ContractDocument = ({
                     .map((day) => {
                       try {
                         return translateDay(day) || day;
-                      } catch (e) {
+                      } catch () {
                         return day;
                       }
                     })
