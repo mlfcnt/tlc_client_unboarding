@@ -3,8 +3,8 @@ import {NextRequest, NextResponse} from "next/server";
 import {Resend} from "resend";
 import * as React from "react";
 import puppeteer from "puppeteer-core";
-// Using any type for chromium to bypass TypeScript errors
-const chromium: any = require("@sparticuz/chromium");
+//@ts-expect-error chromium is not typed
+import chromium from "@sparticuz/chromium";
 
 // Debugging function to safely stringify objects
 const safeStringify = (obj: any) => {
