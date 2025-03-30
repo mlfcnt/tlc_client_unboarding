@@ -50,21 +50,19 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
       color: "#333",
     }}
   >
-    <h2 style={{color: "#2c5282"}}>Estimado/a Administrador/a,</h2>
+    <h2 style={{color: "#2c5282"}}>CLASS PROPOSITION</h2>
+    <p>Estimado/a,</p>
+    <p>Le informamos que hemos completado la revisión de su evaluación.</p>
     <p>
-      Le informamos que hemos completado la revisión de la evaluación para el
-      candidato{" "}
-      <strong>
-        {userInfo.firstname} {userInfo.lastname}
-      </strong>{" "}
-      ({userInfo.email}).
+      Datos del candidato: {userInfo.firstname} {userInfo.lastname} (
+      {userInfo.email}).
     </p>
     <p>
       El candidato ha obtenido un nivel <strong>{level}</strong>.
     </p>
     <p>
       Estamos satisfechos con los resultados y proponemos comenzar el proceso de
-      incorporación a partir del <strong>{formatDate(startDate)}</strong>.
+      incorporación a partir de <strong>{formatDate(startDate)}</strong>.
     </p>
     {additionalContent && (
       <div>
