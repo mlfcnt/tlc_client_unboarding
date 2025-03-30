@@ -3,7 +3,6 @@ import {NextRequest, NextResponse} from "next/server";
 import {Resend} from "resend";
 import * as React from "react";
 import puppeteer from "puppeteer-core";
-//@ts-expect-error chromium is not typed
 import chromium from "@sparticuz/chromium";
 
 // Debugging function to safely stringify objects
