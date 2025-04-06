@@ -4,10 +4,10 @@ import crypto from "crypto";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {orderId} = body;
+    const {onboardingRequestId} = body;
 
     // Validate order ID
-    if (!orderId) {
+    if (!onboardingRequestId) {
       return NextResponse.json({error: "Missing order ID"}, {status: 400});
     }
 
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     // Generate integrity signature according to Bold's documentation
     // Format: {orderId}{amount}{currency}{secretKey}
-    const signatureString = `${orderId}${amount}${currency}${apiSecret}`;
+    const signatureString = `${onboardingRequestId}${amount}${currency}${apiSecret}`;
     const signature = crypto
       .createHash("sha256")
       .update(signatureString)
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
         "data-api-key": apiKey,
         "data-amount": amount,
         "data-currency": currency,
-        "data-order-id": orderId,
+        "data-order-id": onboardingRequestId,
         "data-description": "English Course - 14 Hours",
         "data-redirection-url": "https://www.tlc-unboarding.com/payment-result",
         "data-tax": "vat-19",
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
         vatPercentage: 19,
         vatAmount: Math.round(parseInt(amount) * 0.19),
         totalAmount: parseInt(amount),
-        orderId,
+        orderId: onboardingRequestId,
       },
     });
   } catch (error) {
