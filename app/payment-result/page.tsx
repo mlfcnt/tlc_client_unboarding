@@ -1,18 +1,21 @@
 import {CheckCircle2, XCircle, AlertCircle} from "lucide-react";
 import Link from "next/link";
+import {NextPage} from "next";
 
 type PaymentStatus = "approved" | "rejected" | "failed" | "pending";
 
-interface PaymentResultProps {
-  searchParams: {
-    status?: string;
-    order_id?: string;
-    transaction_id?: string;
-    payment_method?: string;
-  };
+interface SearchParams {
+  status?: string;
+  order_id?: string;
+  transaction_id?: string;
+  payment_method?: string;
 }
 
-export default function PaymentResult({searchParams}: PaymentResultProps) {
+export default function PaymentResult({
+  searchParams = {},
+}: {
+  searchParams: SearchParams;
+}) {
   const status = searchParams.status?.toLowerCase() as PaymentStatus;
   const orderId = searchParams.order_id;
   const transactionId = searchParams.transaction_id;
