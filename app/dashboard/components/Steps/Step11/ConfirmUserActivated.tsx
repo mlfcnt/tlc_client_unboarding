@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import React from "react";
 
-export const NotifyAlert = ({
+export const ConfirmUserActivated = ({
   userId,
   show,
   setShow,
@@ -28,7 +28,7 @@ export const NotifyAlert = ({
   const onConfirm = async () => {
     await updateStatus({
       userId,
-      newStatus: getKeyFromValue(OnboardingStatuses.test_completed),
+      newStatus: getKeyFromValue(OnboardingStatuses.activated),
     });
     setShow(false);
   };
@@ -38,7 +38,8 @@ export const NotifyAlert = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Do you confirm that the user has completed the test?
+            Do you confirm that the user has been created on the academic
+            system?
           </AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>

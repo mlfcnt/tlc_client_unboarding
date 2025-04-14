@@ -537,7 +537,7 @@ export const SendContractForm = ({
                     name="paymentMethod"
                     render={({field}) => (
                       <FormItem>
-                        <FormLabel>Payment Method</FormLabel>
+                        <FormLabel>Instalments</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
@@ -554,7 +554,7 @@ export const SendContractForm = ({
                             <SelectItem value="monthly">
                               Monthly Installments
                             </SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="50/50">50/50</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -564,15 +564,22 @@ export const SendContractForm = ({
                   <FormField
                     control={form.control}
                     name="paymentDates"
-                    render={({field}) => (
-                      <FormItem>
-                        <FormLabel>Payment Date(s)</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    render={({field}) => {
+                      const paymentMethod = form.watch("paymentMethod");
+                      return (
+                        <FormItem>
+                          <FormLabel>
+                            {paymentMethod === "single"
+                              ? "Payment Date"
+                              : "Initial Payment Date(s)"}
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
                   />
                 </div>
                 <div className="flex justify-end space-x-2">

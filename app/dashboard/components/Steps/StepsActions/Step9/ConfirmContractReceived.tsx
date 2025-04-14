@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import React from "react";
 
-export const NotifyAlert = ({
+export const ConfirmContractSigned = ({
   userId,
   show,
   setShow,
@@ -28,7 +28,7 @@ export const NotifyAlert = ({
   const onConfirm = async () => {
     await updateStatus({
       userId,
-      newStatus: getKeyFromValue(OnboardingStatuses.test_completed),
+      newStatus: getKeyFromValue(OnboardingStatuses.contract_signed),
     });
     setShow(false);
   };
@@ -38,7 +38,8 @@ export const NotifyAlert = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Do you confirm that the user has completed the test?
+            Do you confirm that you have received the signed contract and have
+            put it in the google drive?
           </AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>

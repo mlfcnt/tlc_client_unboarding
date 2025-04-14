@@ -32,10 +32,13 @@ const EmailTemplate: React.FC<{studentName: string}> = ({studentName}) => (
       términos y condiciones, proceda a firmarlo.
     </p>
     <p>
-      Una vez firmado, por favor envíenos una copia del documento firmado
-      respondiendo a este correo.
+      Una vez firmado, por favor envíenos una copia del documento a este correo:
+      <a href="mailto:info@educationtlc.com">info@educationtlc.com</a>.
     </p>
-    <p>Si tiene alguna pregunta o inquietud, no dude en contactarnos.</p>
+    <p>
+      Si tiene alguna pregunta o inquietud, no dude en contactar a su agente de
+      ventas.
+    </p>
     <p>Atentamente,</p>
     <p>
       <strong>El equipo de TLC</strong>
@@ -212,7 +215,7 @@ const generateContractHtml = (data: any) => {
               ? "Única cuota"
               : data.paymentMethod === "monthly"
               ? "Cuotas mensuales"
-              : "Otro"
+              : "50/50"
           }
         </p>
         <p class="list-item">

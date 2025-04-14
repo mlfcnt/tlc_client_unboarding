@@ -15,6 +15,8 @@ import {NotifyAlert} from "./StepsActions/Step3/NotifyAlert";
 import {ProposeGroupForm} from "./StepsActions/Step4/ProposeGroupForm";
 import {ContractRequestForm} from "./StepsActions/Step6/ContractRequestForm";
 import {SendContractForm} from "./StepsActions/Step8/SendContractForm";
+import {ConfirmContractSigned} from "./StepsActions/Step9/ConfirmContractReceived";
+import {ConfirmUserActivated} from "./Step11/ConfirmUserActivated";
 
 export const UserActionCard = ({
   userId,
@@ -31,6 +33,10 @@ export const UserActionCard = ({
   const [showProposeGroup, setShowProposeGroup] = useState(false);
   const [showContractRequest, setShowContractRequest] = useState(false);
   const [showSendContract, setShowSendContract] = useState(false);
+  const [showConfirmContractSigned, setShowConfirmContractSigned] =
+    useState(false);
+  const [showConfirmUserActivated, setShowConfirmUserActivated] =
+    useState(false);
 
   return (
     <>
@@ -89,6 +95,20 @@ export const UserActionCard = ({
           user={user}
           show={showSendContract}
           setShow={setShowSendContract}
+        />
+      )}
+      {currentStep === 9 && (
+        <ConfirmContractSigned
+          userId={userId}
+          show={showConfirmContractSigned}
+          setShow={setShowConfirmContractSigned}
+        />
+      )}
+      {currentStep === 11 && (
+        <ConfirmUserActivated
+          userId={userId}
+          show={showConfirmUserActivated}
+          setShow={setShowConfirmUserActivated}
         />
       )}
 
@@ -188,6 +208,17 @@ export const UserActionCard = ({
                   }}
                 >
                   <FileText className="mr-2 h-4 w-4" /> Send contract
+                </div>
+              )}
+              {currentStep === 9 && (
+                <div
+                  className="p-2 cursor-pointer hover:bg-slate-100 rounded flex items-center"
+                  onClick={() => {
+                    setShowConfirmContractSigned(true);
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <FileText className="mr-2 h-4 w-4" /> Confirm contract signed
                 </div>
               )}
             </DropdownMenuContent>

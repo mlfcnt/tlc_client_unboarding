@@ -282,7 +282,7 @@ export const ContractDocument = ({
                 ? "Única cuota"
                 : data.paymentMethod === "monthly"
                 ? "Cuotas mensuales"
-                : "Otro"}
+                : "50/50"}
             </Text>
           </Text>
           <Text style={styles.listItem}>
