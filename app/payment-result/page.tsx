@@ -3,22 +3,15 @@ import Link from "next/link";
 
 type PaymentStatus = "approved" | "rejected" | "failed" | "pending";
 
-interface SearchParams {
-  status?: string;
-  order_id?: string;
-  transaction_id?: string;
-  payment_method?: string;
-}
-
 export default function PaymentResult({
-  searchParams = {},
+  searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: {[key: string]: string | string[] | undefined};
 }) {
-  const status = searchParams.status?.toLowerCase() as PaymentStatus;
-  const orderId = searchParams.order_id;
-  const transactionId = searchParams.transaction_id;
-  const paymentMethod = searchParams.payment_method;
+  const status = searchParams.status?.toString().toLowerCase() as PaymentStatus;
+  const orderId = searchParams.order_id?.toString();
+  const transactionId = searchParams.transaction_id?.toString();
+  const paymentMethod = searchParams.payment_method?.toString();
 
   const getStatusConfig = (status: PaymentStatus) => {
     switch (status) {
