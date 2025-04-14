@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {processSteps, ProcessStep} from "./processSteps";
 import {CurrentStep} from "./CurrentStep";
 import {StepCard} from "./StepCard";
-import {ArrowRight, ArrowDown, LayoutGrid, LayoutList} from "lucide-react";
+import {ArrowRight, LayoutGrid, LayoutList} from "lucide-react";
 import {StepLegend} from "./StepLegend";
 import {useUsersAtStep} from "../../api/useUsersPerStep";
 import {useUser} from "@clerk/nextjs";
@@ -63,13 +63,6 @@ export const Steps = () => {
         <ArrowRight strokeWidth={3} className="w-8 h-8 text-black" />
       </div>
     </td>
-  );
-
-  // Create a reusable down arrow component for vertical layout
-  const DownArrowElement = () => (
-    <div className="h-3 relative flex items-center justify-center my-1">
-      <div className="w-[1px] h-full bg-black"></div>
-    </div>
   );
 
   // Create a special version of StepCard for vertical layout
@@ -211,7 +204,7 @@ export const Steps = () => {
   const renderVerticalLayout = () => (
     <div className="h-full">
       <div className="space-y-5 overflow-y-auto max-h-[75vh] pr-2">
-        {processSteps.map((step, index) => {
+        {processSteps.map((step) => {
           const usersAtThisStep = getUsersAtStep(step.id);
           return (
             <div key={step.id} className="flex items-center flex-col">

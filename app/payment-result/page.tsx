@@ -1,6 +1,5 @@
 import {CheckCircle2, XCircle, AlertCircle} from "lucide-react";
 import Link from "next/link";
-import {NextPage} from "next";
 
 type PaymentStatus = "approved" | "rejected" | "failed" | "pending";
 
